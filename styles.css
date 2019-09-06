@@ -16,4 +16,5 @@ p {
   font: 30px Monaco,"Courier New","DejaVu Sans Mono","Bitstream Vera Sans Mono",monospace;
 }
 
-left{display:block;float:leftss  }
+left{display:block;float:left  }
+right{display:block;float:right}

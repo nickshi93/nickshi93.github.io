@@ -17,4 +17,5 @@ p {
 }
 
 left{display:block;float:left  }
-right{display:block;float:rights}
+right{display:block;float:right}
+center {text-align:center}

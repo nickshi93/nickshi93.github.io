@@ -1,0 +1,39 @@
+ <body>
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+      <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+        <!--<li class="layui-nav-item layui-nav-itemed">
+          <a class="" href="javascript:;">所有商品</a>
+          <dl class="layui-nav-child">
+            <dd><a href="{:url('user')}">列表一</a></dd>
+            <dd><a onclick="layui.element.tabAdd('tabDemo', {title:'新标题', content:'新内容', id: +new Date})">列表二</a></dd>
+            <dd><a href="javascript:;">列表三</a></dd>
+            <dd><a href="{:url('goods')}">超链接</a></dd>
+          </dl>
+        </li> -->
+		{foreach $menu as $k=>$a}
+		 <li class="layui-nav-item">
+          <a href="javascript:;">{$a.name}</a>
+					<dl class="layui-nav-child">
+				{foreach $a['child']['names'] as $c=>$b}
+						 <dd class="{php} if($title==$b) echo 'layui-this';{/php}"><a href="{$c}">{$b}</a></dd>
+				{/foreach}
+				</dl>
+		 </li>
+		{/foreach}
+		
+        <li class="layui-nav-item">
+          <a href="javascript:;">123</a>
+          <dl class="layui-nav-child">
+            <dd class='layui-this'><a href="javascript:;">列表一</a></dd>
+            <dd><a href="javascript:;">列表二</a></dd>
+            <dd><a href="">超链接</a></dd>
+          </dl>
+        </li>
+		
+        <li class="layui-nav-item"><a href="">云市场</a></li>
+        <li class="layui-nav-item"><a href="">发布商品</a></li>
+      </ul>
+    </div>
+  </div>

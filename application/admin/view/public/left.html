@@ -1,0 +1,167 @@
+
+		{foreach $menu as $k=>$a}
+
+				{$a.name}:
+
+				{foreach $a['child']['names'] as $c=>$b}
+					
+					<a href="{$c}">{$b}</a>
+
+				{/foreach}
+	
+		
+		{/foreach}
+		
+
+<!-- Left Panel -->
+    <aside id="left-panel" class="left-panel">
+        
+	<nav class="navbar navbar-expand-sm navbar-default">
+            
+	    <div id="main-menu" class="main-menu collapse navbar-collapse">
+           
+	      <!--左侧导航栏 START-->
+		
+		<ul class="nav navbar-nav">
+                  
+		    <li class="active">
+                        <a href="./"><i class="menu-icon fa fa-laptop"></i>仪表盘 </a>
+                    </li>
+                    <li class="menu-title">主界面</li><!-- /.menu-title -->
+                    
+		    <li class="menu-item-has-children dropdown">
+                                
+				 <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>角色管理</a>
+				 
+				 <ul class="sub-menu children dropdown-menu">  
+				 
+				 {if $qx == 1} 
+				   
+				    <li><i class="fa fa-puzzle-piece"></i><a href="./user">用户管理</a></li>
+				   
+				    <li><i class="fa fa-id-badge"></i><a href="./adduser">新增用户</a></li>
+				    
+				    <li><i class="fa fa-bars"></i><a href="./loginhistory">登录日志</a></li>
+				   
+				    <li><i class="fa fa-book"></i><a href="./updatahistory">上传日志</a></li>
+				    
+				    <li><i class="fa fa-id-card-o"></i><a href="./updatepsd">修改密码</a></li>
+				   
+				   {else} 
+					
+					  <li><i class="fa fa-id-card-o"></i><a href="./updatepsd">修改密码</a></li>							
+						
+				   {/if}
+				
+				</ul>
+                    </li>
+                  
+		   <li class="menu-item-has-children dropdown">
+                       
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-columns"></i>栏目管理</a>
+                      
+			<ul class="sub-menu children dropdown-menu">
+                      
+			    <li><i class="menu-icon fa fa-th"></i><a href="./keyword">栏目新增</a></li>
+                           
+			    <li><i class="menu-icon fa fa-exchange"></i><a href="./rekeyword">栏目管理</a></li>
+
+                        </ul>
+                    </li>
+		   
+		    <li class="menu-item-has-children dropdown">
+                       
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-car"></i>物流单</a>
+                       
+			<ul class="sub-menu children dropdown-menu">
+                            
+			    <li><i class="fa fa-table"></i><a href="./waybill">物流单管理</a></li>
+                            
+			    <li><i class="fa fa-table"></i><a href="./qiyangexcel">七洋表格优化</a></li>
+
+			    <li><i class="fa fa-train"></i><a href="./train">火车查询</a></li>
+                       
+			</ul>
+                   
+		    </li>
+                    
+		    <li class="menu-item-has-children dropdown">
+                       
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-columns"></i>关键字</a>
+                      
+			<ul class="sub-menu children dropdown-menu">
+                      
+			    <li><i class="menu-icon fa fa-th"></i><a href="./keyword">关键字</a></li>
+                           
+			    <li><i class="menu-icon fa fa-exchange"></i><a href="./rekeyword">特殊关键字</a></li>
+			    
+			    <li><i class="fa fa-spinner"></i><a href="./dimword">禁用关键字</a></li>
+
+                        </ul>
+                    </li>
+		   
+		    {if $qx == 1} 
+			   
+			    <li class="menu-item-has-children dropdown">
+				
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa  fa-book"></i>文章模块</a>
+				
+				<ul class="sub-menu children dropdown-menu">
+				    
+				    <li><i class="menu-icon fa fa-list"></i><a href="./articleml">文章目录</a></li>
+				   
+				    <li><i class="menu-icon fa fa-th"></i><a href="./doarticle">写文章</a></li>
+				
+				</ul>
+			   
+			    </li>
+		    {/if} 
+		<!--
+                   
+		    <li class="menu-title">Icons</li>
+
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-tasks"></i>Icons</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class="menu-icon fa fa-fort-awesome"></i><a href="font-fontawesome.html">Font Awesome</a></li>
+                            <li><i class="menu-icon ti-themify-logo"></i><a href="font-themify.html">Themefy Icons</a></li>
+                        </ul>
+                    </li> 
+                   
+		    <li>
+                        <a href="widgets.html"> <i class="menu-icon ti-email"></i>Widgets </a>
+                    </li>
+                   
+		    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-bar-chart"></i>Charts</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class="menu-icon fa fa-line-chart"></i><a href="charts-chartjs.html">Chart JS</a></li>
+                            <li><i class="menu-icon fa fa-area-chart"></i><a href="charts-flot.html">Flot Chart</a></li>
+                            <li><i class="menu-icon fa fa-pie-chart"></i><a href="charts-peity.html">Peity Chart</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-area-chart"></i>Maps</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class="menu-icon fa fa-map-o"></i><a href="maps-gmap.html">Google Maps</a></li>
+                            <li><i class="menu-icon fa fa-street-view"></i><a href="maps-vector.html">Vector Maps</a></li>
+                        </ul>
+                    </li> -->
+		    <!-- 
+                    <li class="menu-title">Extras</li>
+                    <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-glass"></i>Pages</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class="menu-icon fa fa-sign-in"></i><a href="page-login.html">Login</a></li>
+                            <li><i class="menu-icon fa fa-sign-in"></i><a href="page-register.html">Register</a></li>
+                            <li><i class="menu-icon fa fa-paper-plane"></i><a href="pages-forget.html">Forget Pass</a></li>
+                        </ul>
+                    </li>
+		    /.menu-title -->
+                </ul> 
+		 <!--左侧导航栏 END-->
+            </div><!-- /.navbar-collapse -->
+        </nav>
+    </aside>
+    <!-- /#left-panel -->

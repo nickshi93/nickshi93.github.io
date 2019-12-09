@@ -1,0 +1,58 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>前端UI</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="icon" type="image/png" href="assets/i/favicon.png">
+  <link rel="stylesheet" href="/static/home/amazeui/css/amazeui.min.css">
+  <link rel="stylesheet" href="/static/home/amazeui/css/app.css">
+</head>
+<body>
+
+<!-- Header -->
+<header data-am-widget="header" class="am-header am-header-default">
+  <h1 class="am-header-title">
+    <a href="#title-link">前端首页</a>
+  </h1>
+</header>
+
+<!-- Menu -->
+<nav data-am-widget="menu" class="am-menu  am-menu-offcanvas1" data-am-menu-offcanvas>
+  <a href="javascript: void(0)" class="am-menu-toggle">
+    <i class="am-menu-toggle-icon am-icon-bars"></i>
+  </a>
+  <div class="am-offcanvas">
+    <div class="am-offcanvas-bar">
+      <ul class="am-menu-nav sm-block-grid">
+
+			<li class="">
+			  <a href="login">登录</a>
+			</li>
+			{foreach $data as $nav}
+			  <li class="am-parent">
+				<a href="#c3">{$nav.name}</a>
+				{if condition="$nav.children neq null"}
+					<ul class="am-menu-sub am-collapse  sm-block-grid">
+					{foreach $nav.children as $navclid}
+					 <li class="">
+					 <a href="index.php{:url('user/index')}">
+						{$navclid.name}
+					 </a>
+					 </li>
+				
+					{/foreach}
+						</ul>
+					{/if}
+				</li>
+			{/foreach}
+			
+      </ul>
+    </div>
+  </div>
+</nav>

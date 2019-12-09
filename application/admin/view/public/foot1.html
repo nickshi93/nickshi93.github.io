@@ -1,0 +1,28 @@
+<div class='layui-footer'>
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+  </div>
+  <!-- 底部 -->
+
+<script src="/static/admin/js/layui.js"></script>
+<script>
+
+layui.use(['element', 'form'], function(){
+  var element = layui.element;
+  
+  element.on('tab(test)', function(data){
+    console.log(this, data);
+  });
+  
+  element.on('nav(test)', function(elem){
+    console.log(elem)
+  });
+  
+  element.on('collapse(test)', function(data){
+    console.log(data);
+  });
+});
+</script>
+
+</BODY>
+</HTML>

@@ -1,0 +1,81 @@
+{include file='public/header1'}
+<body class="layui-view-body">
+    <div class="layui-content">
+        <div class="layui-row" >
+			 <div class="layui-page-header">
+				<div class="pagewrap">
+					<span class="layui-breadcrumb">
+					  <a >首页</a>
+					  <a href="">栏目管理</a>
+					   <a href="index">栏目管理</a>
+					  <a><cite>编辑栏目</cite></a>
+					</span>
+				</div>		 
+			  </div>			
+			<div class="layui-row" style='margin:0 auto'>
+				<div class="layui-card" style='min-height:500px;'>
+					 <div class="layui-card-body">
+						 <div class="form-box">
+							<form class="layui-form layui-form-pane1" action="updatecate" lay-filter="first">
+								{foreach $category as $a}
+									 <div class="layui-form-item">
+										<label class="layui-form-label">栏目名</label>
+										<div class="layui-input-inline">
+										  <input type="text" name="name" class="layui-input"  value='{$a.name}'>
+										</div>
+									  </div>
+										 <input type="hidden" name="id" class="layui-input"  value='{$a.id}' >
+									 
+									  <div class="layui-form-item" pane>
+										<label class="layui-form-label">栏目分类</label>
+											<div class="layui-input-inline">
+												<select name="pid" lay-filter="interest">
+													<option value=""></option>
+													<option value="0" selected>顶级栏目</option>
+													{foreach $tops as  $b}
+														<option value="{$b.id}" {if condition="$b.id eq $a.pid"}selected{/if}> {$b.name}</option>
+													{/foreach}
+												
+											   </select>											
+										   </div>
+									  </div>
+
+									   <div class="layui-form-item">
+										<label class="layui-form-label">排序</label>
+										<div class="layui-input-inline">
+										  <input type="text" name="sortid" class="layui-input"  value='{$a.sortid}'>
+										</div>
+									  </div>
+
+									   <div class="layui-form-item" pane="">
+										<label class="layui-form-label">前台显示</label>
+										<div class="layui-input-inline">
+										  <input {if condition ="$a.is_show eq 0"}checked{/if}  type="radio" name="ishow" value="0" title="显示" >
+										  <input {if condition ="$a.is_show eq 1"}checked{/if} type="radio" name="ishow" value="1" title="不显示">		
+										</div>
+									  </div>
+										
+									   <div class="layui-form-item">
+										<div class="layui-input-block">
+										  <button class="layui-btn" lay-submit lay-filter="*">立即提交</button>
+										  <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+										</div>
+									  </div>	
+								{/foreach}
+
+							</form>
+						 </div>
+					</div>
+				</div>
+			</div>
+
+			 
+		 </div>	
+	</div>
+	
+	
+<script src="/static/admin/layui/assets/layui.js"></script>
+<script src="/static/admin/layui/assets/layui.all.js"></script>
+
+
+{include file='public/foot2'}

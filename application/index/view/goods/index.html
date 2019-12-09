@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type"  />
+<style>
+.con{ height:1200px;}
+.list{ list-style:none; padding:0; margin:0; border-top:2px solid blue;}
+.list li{ height:500px; border-bottom:1px solid green;}
+.list li p{ opacity:0; animation:move 1s forwards; animation-play-state:paused;}
+.list .move p{ animation-play-state:running;}
+@keyframes move{
+from{ opacity:0; margin-left:500px;}
+to{ opacity:1; margin-left:0;}
+}
+</style>
+<script src="http://libs.baidu.com/jquery/1.7.0/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+var a,b,c;
+a=$(window).height();	
+$(window).scroll(function(){	
+var b=$(this).scrollTop();
+$(".list li").each(function(){
+c=$(this).offset().top;	
+if(a+b>c){
+$(this).addClass("move");
+}
+else{
+$(this).removeClass("move");
+}
+});	
+});
+
+});
+</script>
+</head>
+<body>
+<div class="con">{$say}</div>
+<div>这是goods模板</div>
+<ul class="list"> 
+<li>
+<p>第1屏动画进入视线</p>
+</li>
+<li>
+<p>第2屏动画进入视线</p>
+</li>
+<li>
+<p>第3屏动画进入视线</p>
+</li>
+</ul>
+
+</body>

@@ -1,0 +1,55 @@
+{include file="public/header"}
+<script>
+$(document).ready(function(){
+var a,b,c;
+a=$(window).height();	
+$(window).scroll(function(){	
+var b=$(this).scrollTop();
+$(".list li").each(function(){
+c=$(this).offset().top;	
+if(a+b>c){
+$(this).addClass("move");
+}
+else{
+$(this).removeClass("move");
+}
+});	
+});
+
+});
+</script>
+</head>
+<body>
+<div class="con">{$say}<input type='text' name='first'><button>确定</button>
+
+{foreach $user as $tp}
+
+{$tp.username}
+
+{/foreach}
+<ul style='list-style:none'>
+	
+{volist name='user' id='user'}
+
+<li>{$user.username}</li>
+
+{/volist}
+
+</ul>
+{$page}
+
+</div>
+
+<ul class="list"> 
+<li>
+<p>第1屏动画进入视线</p>
+</li>
+<li>
+<p>第2屏动画进入视线</p>
+</li>
+<li>
+<p>第3屏动画进入视线</p>
+</li>
+</ul>
+
+</body>

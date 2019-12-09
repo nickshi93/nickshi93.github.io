@@ -1,0 +1,141 @@
+{include file="public/header1"}
+<body class="layui-view-body">
+    <div class="layui-content">
+        <div class="layui-row" >
+			 <div class="layui-page-header">
+				<div class="pagewrap">
+					<span class="layui-breadcrumb">
+					  <a >首页</a>
+					  <a><cite>个人资料编辑</cite></a>
+					</span>
+				</div>		 
+			  </div>	
+			  
+			<div class="layui-row" style='margin:0 auto'>
+				<div class="layui-card" style='min-height:500px;'>
+					 <div class="layui-card-body">
+						 <div class="form-box">
+							<form class="layui-form layui-form-pane1" action="{:url('user/userupdate')}" lay-filter="first">									
+									 <div class="layui-form-item">
+										<label class="layui-form-label">用户名</label>
+										<div class="layui-input-inline">
+										  <input type="text" name="names" class="layui-input"  value='{$name}' disabled='disabled'>
+										</div>
+									  </div>
+										 <input type="hidden" name="username" class="layui-input"  value='{$name}' >
+									  <div class="layui-upload">
+									    <label class="layui-form-label">头像</label>
+										<div class="layui-input-inline">
+										 <div  class="newimg"><img id='changeimg' src="{$image}"  width="100" height="100" border="0" alt="">
+											   <a  class="userimg">
+													点击更改头像
+												</a>
+										 </div>
+											
+											
+										</div> 
+								      </div>   
+									  <div class="layui-form-item" style='margin-top:10px;'>
+										<label class="layui-form-label">新密码</label>
+										<div class="layui-input-inline">
+										  <input type="password" name="password" lay-verify="required|password" placeholder="请输入密码" autocomplete="off" class="layui-input">
+										</div>
+										<!-- <div class="layui-form-mid layui-word-aux">请务必填写用户名</div> -->
+									  </div>
+									 
+									  <div class="layui-form-item">
+										<label class="layui-form-label">确认密码</label>
+										<div class="layui-input-inline">
+										  <input type="password" name="repassword" lay-verify="required|confirmpass" placeholder="请输入密码" autocomplete="off" class="layui-input">
+										</div>
+									  </div>
+									  
+									   <div class="layui-form-item">
+										<div class="layui-input-block">
+										  <button class="layui-btn" lay-submit lay-filter="*">立即提交</button>
+										  <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+										</div>
+									  </div>	
+							
+							</form>
+						 </div>
+					</div>
+				</div>
+			</div>
+
+			 
+		 </div>	
+	</div>
+
+<script src="/static/admin/layui/assets/layui.all.js"></script>
+<script>
+;!function(){
+
+  var $ = layui.jquery,
+	  layer = layui.layer,
+	  form = layui.form,
+	  table =layui.table,
+	  laypage = layui.laypage;
+	  form.verify({
+
+				username:function(value,item){ //value：表单的值、item：表单的DOM对象
+
+					if(value.length<2){
+						return '不得少于2位';
+					}
+				}
+				,confirmpass:function(value){
+				
+				 if($('input[name=password]').val() !== value){
+				   return '两次密码输入不一致！';
+				   }
+				}
+				,password: [/^[\S]{6,12}$/,'密码必须6到12位，且不能出现空格'] 
+				
+			});
+
+}();
+</script>
+<script>
+layui.use('upload', function(){
+  var $ = layui.jquery
+  ,upload = layui.upload;
+  
+  //普通图片上传
+  var uploadInst = upload.render({
+    elem: '#changeimg'
+    ,url: '{:url('user/userimg')}'
+    ,before: function(obj){
+      //预读本地文件示例，不支持ie8
+      obj.preview(function(index, file, result){
+        $('#changeimg').attr('src', result); //图片链接（base64）
+		 $('#userimg').attr('src', result); //图片链接（base64）
+      });
+    }
+    ,done: function(res){		
+      //如果上传失败
+      if(res.code = 0){
+        
+		return layer.msg('上传失败');
+      
+	  }else{
+	  
+		 return layer.msg('上传成功');	
+	  }
+	
+      //上传成功
+    }
+    ,error: function(){
+      //演示失败状态，并实现重传
+      var demoText = $('#demoText');
+      demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+      demoText.find('.demo-reload').on('click', function(){
+        uploadInst.upload();
+      });
+    }
+  });
+  
+});
+</script>
+
+{include file='public/foot2'}

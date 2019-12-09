@@ -1,0 +1,65 @@
+{include file='public/header1'}
+<body class="layui-view-body">
+    <div class="layui-content">
+        <div class="layui-row" >
+			 <div class="layui-page-header">
+				<div class="pagewrap">
+					<span class="layui-breadcrumb">
+					  <a >首页</a>
+					  <a href="">角色管理</a>
+					   <a href="index">角色管理</a>
+					  <a><cite>编辑权限</cite></a>
+					</span>
+				</div>		 
+			  </div>			
+			<div class="layui-row" style='margin:0 auto'>
+				<div class="layui-card" style='min-height:500px;'>
+					 <div class="layui-card-body">
+						 <div class="form-box">
+							<form class="layui-form layui-form-pane1" action="updaterole" lay-filter="first">
+								{foreach $role as $a}
+									 <div class="layui-form-item">
+										<label class="layui-form-label">角色名</label>
+										<div class="layui-input-inline">
+										  <input type="text" name="name" class="layui-input"  value='{$a.name}' >
+										</div>
+									  </div>
+										 <input type="hidden" name="id" class="layui-input"  value='{$a.id}' >
+									  <div class="layui-form-item" pane>
+										<label class="layui-form-label">权限</label>
+											<div class="layui-input-block" style='width:50%'>
+											{foreach $menu as $k=>$a}							
+												<input type="checkbox" name="role[]" value='{$a.id}' lay-skin="primary" {in name="$a.id" value='$authority'}checked {/in} title="{$a.name}">	
+												{foreach $a['child'] as $b}						
+														<input type="checkbox" name="role[]" value='{$b.id}' lay-skin="primary" {in name="$a.id" value='$authority'}checked {/in} title="{$b.name}">	
+												{/foreach}
+												<br>
+											{/foreach}		
+											
+											</div>
+									  </div>
+
+									   <div class="layui-form-item">
+										<div class="layui-input-block">
+										  <button class="layui-btn" lay-submit lay-filter="*">立即提交</button>
+										  <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+										</div>
+									  </div>
+									  
+								{/foreach}
+
+							</form>
+						 </div>
+					</div>
+				</div>
+			</div>		 
+		 </div>	
+	</div>
+	
+	
+<script src="/static/admin/layui/assets/layui.js"></script>
+
+<script src="/static/admin/layui/assets/layui.all.js"></script>
+
+
+{include file='public/foot2'}

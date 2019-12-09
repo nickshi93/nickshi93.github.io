@@ -36,6 +36,13 @@
 			
 			}
 			
+			$user =Db::table('tp_member')->where('phone',$phone)->select();
+			
+			if(!$user){
+				
+				$this->error('手机号未注册，请先注册');
+			}
+			
 			if($keyid =='' | $keysecret=='' | $signame=='' | $templatecode==''){
 					
 				$this->error('短信发送失败');

@@ -55,7 +55,7 @@
 		//根据pid的值查询栏目
 		public function categorytree($pid,$params){
 				
-			$cate =Db::table('tp_category')->where($pid,$params)->where('is_show','0')->select();
+			$cate =Db::table('tp_category')->where($pid,$params)->where('is_show','0')->order('sortid asc')->select();
 				
 			return $cate;
 		}

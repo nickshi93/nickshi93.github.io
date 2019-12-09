@@ -36,8 +36,8 @@
 			
 			}
 			
-			if($key == '' | $keysecret=='' | $signame=='' | $templatecode==''){
-				
+			if($keyid =='' | $keysecret=='' | $signame=='' | $templatecode==''){
+					
 				$this->error('短信发送失败');
 				
 				return;
@@ -91,9 +91,9 @@
 				)),
 				$security
 			);
-			
-			$msg = json_encode($content);
-			
+						
+			//print_r($content); 短信发送返回的信息
+
 			Session::set('yzm',md5($code));
 			
 			$yzm =Session::get('yzm');

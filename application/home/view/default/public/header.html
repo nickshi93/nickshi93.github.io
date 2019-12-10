@@ -6,55 +6,44 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>[title]</title>
 <link rel="stylesheet" href="/static/home/css/style.css">
-
 <link rel="stylesheet" href="/static/admin/layui/assets/css/layui.css" media="all"> 
  <!-- Link Swiper's CSS -->
  <link rel="stylesheet" href="/static/home/swiper/css/swiper.min.css">
-<script src="/static/admin/assets/layui.js"></script>
-<script src="/static/admin/assets/layui.all.js"></script>
-
 </head>
 <body>
-<div class="head" id="head">
-	<a name="top"></a>
-	<div class="logo lf">
-		<a href="javascript:;">
+<div class="header">
+	<ul class="layui-nav layui-bg-green" style='height:100px;line-height:100px;'>
+		 <li  style='float:left;margin-left:10%'>
 			<img src="/static/home/images/logo.png" style='width:100px;height:auto;'>
-			
-		</a>
-	</div>
-	<div class="nav rg">
-		<ul class="nav_pc">
-			{foreach $data as $nav}
-			<li>
-				<a class="a1 " href="javascript:;">{$nav.name}</a>
+		</li>
+		<div id="" class="" style='width:50%;margin:0 auto'>		
+			 <li class="layui-nav-item  layui-this"><a href="">藏青导航</a></li>
+			 {foreach $data as $nav}
+			 <li class="layui-nav-item">
+				<a class="a1" href="{$nav.url}">{$nav.name}</a>
 				{if condition="$nav.children neq null"}
-				<div class="div1 mad">
-				<div class="p1">
-					{foreach $nav.children as $navclid}
-					<a href="javascript:;">{$navclid.name}</a>
-					{/foreach}
-					</div>
-						<div class="clear"></div>					
-					</div>
-					{/if}
-				</li>
+					<dl class="layui-nav-child">
+						{foreach $nav.children as $navclid}
+						 <dd><a href="{$navclid.url}">{$navclid.name}</a></dd>
+						{/foreach}
+					</dl>	
+				{/if}
+			</li>
 			{/foreach}
-			
 			{if condition="$user eq null"}
-				<li style='float:right;margin-right:50px;' ><a class="a1" href="{:url('login/index')}">登录</a></li>
+				<li class="layui-nav-item" style='float:right;margin-top:15px;line-height:80px;' >
+					<a class="a1" href="{:url('login/index')}">登录</a>
+				</li>
 			{else}
-			<li style='float:right;margin-right:50px;' >
-			<a class="a1" >Hi,{$user}</a>
-				<div class="div1 mad">
-					<div class="p1">
-						<a href="{:url('member/index')}">个人中心</a>
-						<a href="{:url('login/loginout')}">退出</a>
-					</div>
-				</div>
-			</li>{/if}
-			<div class="clear"></div>
-		</ul>
-	</div>
-	<div class="clear"></div>
+				<li class="layui-nav-item" style='float:right;margin-top:15px;line-height:80px;' >
+					<a class="a1" >Hi,{$user}</a>
+					<dl class="layui-nav-child">
+						<dd><a href="{:url('member/index')}">个人中心</a></dd>
+						<dd><a href="{:url('login/loginout')}">退出</a></dd>	
+					</dl>
+				</li>
+			{/if}
+		</div>
+	</ul>
 </div>
+<script src="/static/admin/assets/layui.js"></script>

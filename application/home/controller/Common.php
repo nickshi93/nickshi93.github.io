@@ -24,6 +24,8 @@
 				$cates['name']=$k['name'];
 					
 				$cates['children']=$this->categorytree($pid,$id); //根据一级栏目id查询二级栏目
+				
+				$cates['url']=$k['url'];
 					
 				$data[]=$cates;
 			} 

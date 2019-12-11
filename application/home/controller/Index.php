@@ -10,9 +10,10 @@ use think\Cookie;
 class Index extends Controller{
 	
 	   public function index()
-	   {	   
-	   
+	   {	   	   
 			$title='前台首页';
+			
+			$id='';
 	 
 			$common =new Common();
 			
@@ -24,21 +25,22 @@ class Index extends Controller{
 			
 			$this->assign('data',$data); //头部栏目	
 			
-			$banner =Db::table('tp_banner')->where('imgtype',0)->order('sortid asc')->select();
+			$banner =Db::table('tp_banner')->where('imgtype',0)->order('sortid asc')->select(); //PC端
 
-			$mbanner =Db::table('tp_banner')->where('imgtype',1)->order('sortid asc')->select();
+			$mbanner =Db::table('tp_banner')->where('imgtype',1)->order('sortid asc')->select();//手机端
 			
 			$this->assign('banner',$banner);
 			
 			$this->assign('mbanner',$mbanner);
 			
 			$this->assign('title',$title);
+			
+			$this->assign('id',$id);
 				
 			return $this->fetch();
 		
 	   }
 
-	
 
 		public function user(){
 			

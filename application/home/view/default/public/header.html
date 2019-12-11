@@ -4,7 +4,7 @@
 <meta name="renderer" content="webkit">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>[title]</title>
+<title>{$title}</title>
 <link rel="stylesheet" href="/static/home/css/style.css">
 <link rel="stylesheet" href="/static/admin/layui/assets/css/layui.css" media="all"> 
  <!-- Link Swiper's CSS -->
@@ -17,14 +17,22 @@
 			<img src="/static/home/images/logo.png" style='width:100px;height:auto;'>
 		</li>
 		<div id="" class="" style='width:50%;margin:0 auto'>		
-			 <li class="layui-nav-item  layui-this"><a href="">藏青导航</a></li>
-			 {foreach $data as $nav}
 			 <li class="layui-nav-item">
-				<a class="a1" href="{$nav.url}?id={$nav.id}">{$nav.name}</a>
+					<a href="{:url('index/index')}">首页</a>
+			 </li>
+			 {foreach $data as $nav}				
+					{if condition="$nav.id eq $id"} <li class="layui-nav-item  layui-this">
+					{else} <li class="layui-nav-item">
+					{/if}
+				<a class="a1" href="{:url($nav.url.'/index','id='.$nav.id)}">{$nav.name}</a>
 				{if condition="$nav.children neq null"}
-					<dl class="layui-nav-child">
+					<dl class="layui-nav-child">				
 						{foreach $nav.children as $navclid}
-						 <dd><a href="{$navclid.url}?id={$navclid.id}">{$navclid.name}</a></dd>
+						<dd>
+							<a href="{:url($navclid.url.'/index','id='.$navclid.id)}">
+								{$navclid.name}
+							</a>
+						</dd>
 						{/foreach}
 					</dl>	
 				{/if}

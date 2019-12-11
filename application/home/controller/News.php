@@ -1,17 +1,16 @@
-<?php
+<?php 
 
 	namespace app\home\controller;
-
+	
 	use think\Controller;
 	
-	use think\db;
+	use think\Db;
 	
 	use think\Cookie;
+	
+	class news extends Controller{
 
-	class Goods extends Controller{
-
-		public function index($id)
-		{
+		public function index($id){
 			
 			$common =new Common();
 			
@@ -36,9 +35,8 @@
 			$this->assign('id',$id);
 			
 			return $this->fetch();
-						
+			
 		}
-	
 		
-	
+		
 	}

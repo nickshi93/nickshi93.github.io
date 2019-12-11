@@ -1,0 +1,33 @@
+<script src="/static/home/js/jquery-1.11.0.js"></script>
+<script src="/static/home/js/script.js"></script>
+
+    <!-- Swiper JS -->
+    <script src="/static/home/swiper/js/swiper.min.js"></script>
+
+    <!-- Initialize Swiper -->
+    <script>
+    var swiper = new Swiper('.swiper-container', {
+        pagination: '.swiper-pagination',
+        paginationClickable: true,
+        nextButton: '.swiper-button-next',
+        prevButton: '.swiper-button-prev',
+        autoHeight: true, //enable auto height
+		autoplay:3000, 
+		  effect: 'fade'
+    });
+    </script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+layui.use('element', function(){
+  var element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
+  
+  //监听导航点击
+  element.on('nav(demo)', function(elem){
+    console.log(elem)
+    layer.msg(elem.text());
+  });
+});
+</script>
+
+
+</body>

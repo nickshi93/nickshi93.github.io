@@ -135,9 +135,15 @@ return [
     'not conform to the rules'                                  => '规则错误',
 	
 	//前端
-		'zn'=>'中文',
-		
+		//头部
+		'zn'=>'中文',		
 		'en'=>'英语',
+		'home'=>'首页',	
+		'login' =>'登录',		
+		'logout' =>'退出',
+		'member'=>'会员中心',
+		
+		
 		'goods'=>'商品',
 		'buttton'=>'按钮',
 		'news'=>'新闻',

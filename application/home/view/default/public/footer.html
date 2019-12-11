@@ -27,6 +27,13 @@ layui.use('element', function(){
     layer.msg(elem.text());
   });
 });
+$('.lang').click(function(){
+    var data={'lang':$(this).attr('lang')};
+    $.get("{:url('index/lang')}",data,function(){
+        location.reload();
+    })
+})
+
 </script>
 
 

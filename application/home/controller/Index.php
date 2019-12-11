@@ -41,16 +41,14 @@ class Index extends Controller{
 		
 	   }
 
-
-		public function user(){
+		//语言切换
+		public function lang($lang){
 			
-			$user =new User();
+			$la = new Lang();
 			
-			return $user->index();
-			
-			
-		}
+			$la ->index($lang);
 		
+		}
 
 
 

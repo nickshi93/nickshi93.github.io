@@ -18,7 +18,7 @@
 		</li>
 		<div id="" class="" style='width:50%;margin:0 auto'>		
 			 <li class="layui-nav-item">
-					<a href="{:url('index/index')}">首页</a>
+					<a href="{:url('index/index')}">{:lang('home')}</a>
 			 </li>
 			 {foreach $data as $nav}				
 					{if condition="$nav.id eq $id"} <li class="layui-nav-item  layui-this">
@@ -40,14 +40,14 @@
 			{/foreach}
 			{if condition="$user eq null"}
 				<li class="layui-nav-item" style='float:right;margin-top:15px;line-height:80px;' >
-					<a class="a1" href="{:url('login/index')}">登录</a>
+					<a class="a1" href="{:url('login/index')}">{:lang('login')}</a>
 				</li>
 			{else}
 				<li class="layui-nav-item" style='float:right;margin-top:15px;line-height:80px;' >
 					<a class="a1" >Hi,{$user}</a>
 					<dl class="layui-nav-child">
-						<dd><a href="{:url('member/index')}">个人中心</a></dd>
-						<dd><a href="{:url('login/loginout')}">退出</a></dd>	
+						<dd><a href="{:url('member/index')}">{:lang('member')}</a></dd>
+						<dd><a href="{:url('login/loginout')}">{:lang('logout')}</a></dd>	
 					</dl>
 				</li>
 			{/if}

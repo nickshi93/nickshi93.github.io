@@ -20,11 +20,11 @@
 			 <li class="layui-nav-item  layui-this"><a href="">藏青导航</a></li>
 			 {foreach $data as $nav}
 			 <li class="layui-nav-item">
-				<a class="a1" href="{$nav.url}">{$nav.name}</a>
+				<a class="a1" href="{$nav.url}?id={$nav.id}">{$nav.name}</a>
 				{if condition="$nav.children neq null"}
 					<dl class="layui-nav-child">
 						{foreach $nav.children as $navclid}
-						 <dd><a href="{$navclid.url}">{$navclid.name}</a></dd>
+						 <dd><a href="{$navclid.url}?id={$navclid.id}">{$navclid.name}</a></dd>
 						{/foreach}
 					</dl>	
 				{/if}

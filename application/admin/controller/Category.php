@@ -77,7 +77,7 @@
 			
 		}
 		//新增栏目
-		public function addcategory($name,$id,$ishow,$sortid){
+		public function addcategory($name,$id,$ishow,$sortid,$template){
 
 			$data =[
 				
@@ -86,8 +86,10 @@
 				'pid'=>$id,
 				
 				'sortid'=>$sortid,
+
+				'is_show'=>$ishow,
 				
-				'is_show'=>$ishow
+				'url'=>$template
 			
 			];
 			
@@ -123,19 +125,26 @@
 						
 		}
 		
-		
-		public function updatecate($id,$pid,$name,$sortid,$ishow){
+		//更新编辑栏目信息
+		public function updatecate($id,$pid,$name,$sortid,$ishow,$template){
 
 			$table ='tp_category';
 			
-			$userole=Db::table($table)
-					->where('id',$id)
-					->update([
-						'pid'  => $pid,
-						'name' => $name,
-						'is_show'=>$ishow,
-						'sortid'=>$sortid
-					]);
+			$data =[
+			
+				'pid'  => $pid,
+				
+				'name' => $name,
+				
+				'is_show'=>$ishow,
+				
+				'url'=>$template,
+				
+				'sortid'=>$sortid
+
+			];
+			
+			$userole=Db::table($table)->where('id',$id)->update($data);
 			
 			$this->success('编辑成功');
 				

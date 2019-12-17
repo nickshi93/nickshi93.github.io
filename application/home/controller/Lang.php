@@ -4,7 +4,7 @@
 	use think\Controller;
 	
 	use think\Cookie;
-	
+
 	class Lang extends Controller{
 		
 		public function index($lang){

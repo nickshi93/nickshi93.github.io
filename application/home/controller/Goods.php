@@ -8,11 +8,12 @@
 	
 	use think\Cookie;
 
+	use think\lang;
+
 	class Goods extends Controller{
 
 		public function index($id)
 		{
-			
 			$common =new Common();
 			
 			$data =$common ->index();

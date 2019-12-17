@@ -49,6 +49,7 @@ class Index extends Controller{
 			$la ->index($lang);
 		
 		}
+		
 
 
 

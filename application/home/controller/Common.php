@@ -5,6 +5,8 @@
 	
 	use think\Db;
 	
+	use think\Cookie;
+	
 	class Common extends Controller{
 				
 		public function index(){
@@ -62,6 +64,88 @@
 			return $cate;
 		}
 		
+		//头部栏目信息
+		public function common(){
+			
+			$id =0;
+			
+			$pid ='pid';
+			
+			$cate = $this ->categorytree($pid,$id); //查询pid=0的一级栏目
+			
+			foreach($cate as $k) {
+				
+				$id = $k['id'];
+					
+				$cates['id']=$id;
+					
+				$cates['name']=$k['name'];
+					
+				$cates['children']=$this->categorytree($pid,$id); //根据一级栏目id查询二级栏目
+				
+				$cates['url']=$k['url'];
+					
+				$data[]=$cates;
+			} 
+			
+			$user =Cookie::get('user');
+			
+			$this->assign('user',$user);
+			
+			$this->assign('data',$data);
+			
+			
+		}
+		
+		//下一篇链接
+		public function pagenext($id){
+			
+			$pagenext = Db('article')->where('id','>',$id)->limit(1)->select();
+			
+			if(!$pagenext){
+				
+				$pagenext =[
+				
+					[
+						'title'=>'没有了',
+						'id'=>''
+					]
+				];
+									
+				$this->assign('pagenext',$pagenext);
+				
+			}{
+				
+				$this->assign('pagenext',$pagenext);
+				
+			}
+			
+			
+		}
+		//上一篇链接
+		public function pageprev($id){
+				
+			$pageprev =Db('article')->where('id','<',$id)->limit(1)->order('id desc')->select();
+			
+			if(!$pageprev){
+				
+				$pageprev =[
+				
+					[
+						'title'=>'没有了',
+						'id'=>''
+					]
+				];
+				
+				$this->assign('pageprev',$pageprev);
+				
+			}{
+				
+				$this->assign('pageprev',$pageprev);
+				
+			}
+			
+		}
 		
 		
 	}	

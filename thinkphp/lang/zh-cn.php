@@ -147,5 +147,11 @@ return [
 		'goods'=>'商品',
 		'buttton'=>'按钮',
 		'news'=>'新闻',
+	
+	//底部
+	'my_web' =>'我的网站',
+	'copyright'=>'版权所有',
+	'web_descript'=>'本页面内容为网站演示数据，前台页面内容都可以在后台修改。',
+	'powerby' =>'Powered by',
 		
 ];

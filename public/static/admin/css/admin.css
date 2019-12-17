@@ -1,0 +1,101 @@
+.header{ width:100%; height:106px; margin:0 auto; background:#FAFAFA url(../images/head_bg.jpg) repeat-x; border-top:#0F58A4 3px solid;box-sizing:content-box;}
+#user{width:1024px; height:106px; margin:0 auto; background: url(../images/header.jpg) center top no-repeat;color:white; text-align:center; font-family: "微软雅黑"; overflow:hidden;}
+#user img{ float:left; width:449px; margin:22px 0px; margin-left:35px;}
+#user a{ color:#fff;}
+#user a:hover{ color:#fff; text-decoration:none;}
+#user .login{width:5%; color:#fff; font-size:16px; border:none}
+#user h3{ height:50px; line-height:50px; font-size:24px; margin:0; padding:0;font-family: "微软雅黑";}
+#user .user-login{ text-align:right; height:40px; margin-right:35px; float:right; margin-top:33px;}
+#user a.colocr{ background:#f00;border-color:#D81538;}
+#user a.colocr:hover{ background:#D81538}
+
+
+.remake-name{width:100%; font-size:36px; font-weight:bold; line-height:200px; text-align:center; margin:0 auto;font-family: "微软雅黑";}
+.remake-info{width:40%; margin:0 auto; height:auto;font-family: "微软雅黑";}
+
+
+.hideShowPassword-toggle { background-image: url(../images/yy.gif); background-position: 0 center; background-repeat: no-repeat; cursor: pointer; height: 100%; overflow: hidden; text-indent: -9999em; width: 44px;  }
+ .hideShowPassword-toggle-hide { background-image: url(../images/yy2.gif); background-position: 0px center; }
+
+
+.index-all{width:50%; height:200px; margin:0 auto; background:#44B5DF;border-radius:25px; margin-top:10%}
+.index-top{ display:block;width:100%; height:auto;font-size:35px; line-height:60px; text-align:center; color:#fff; padding-top:20px; font-family:"微软雅黑";}
+.index-searchall{padding: 30px 100px 10px;}
+
+
+
+@media screen and (max-width:1120px) {
+#user{ width:1120px;}
+}
+@media screen and (min-width:1025px) {
+#user{ width:1024px;}
+.remake-info{ width:40%;}
+.form-group button{ margin-left:25%;}
+}
+@media screen and (max-width:1024px) {
+#user{ width:1024px;}
+.remake-info{ width:60%;}
+.form-group button{ margin-left:25%;}
+}
+@media screen and (max-width:768px) {
+.header{ height:106px;}
+#user{ width:768px; height:106px;}
+.remake-name{ height:80px; line-height:80px; font-size:18px;}
+#user img{ width:70%; margin:0 15%;}
+.remake-info{ width:80%; margin-left:20%;}
+.form-group button{ margin-left:7%;}
+#user .btn{ padding:2px 3px;}
+#user .user-login{ width:100%; float:left;margin-top:0px; padding-right:25px;}
+}
+
+@media screen and (max-width:736px) {
+.header{ height:106px;}
+#user{ width:736px; height:106px;}
+.remake-name{ height:80px; line-height:80px; font-size:18px;}
+#user img{  width:70%; margin:0 15%;}
+.remake-info{ width:80%; margin-left:13%;}
+.form-group button{ margin-left:30%;}
+#user .btn{ padding:2px 3px;}
+#user .user-login{ width:100%; float:left;margin-top:0px; padding-right:25px;}
+}
+@media screen and (max-width:734px) {
+.header{ height:106px;}
+#user{ width:734px; height:106px;}
+.remake-name{ height:80px; line-height:80px; font-size:18px;}
+#user img{  width:70%; margin:0 15%;}
+.remake-info{ width:80%; margin-left:13%;}
+.form-group button{ margin-left:30%;}
+#user .btn{ padding:2px 3px;}
+#user .user-login{ width:100%; float:left;margin-top:0px; padding-right:25px;}
+}
+@media screen and (max-width:684px) {
+.header{ height:106px;}
+#user{ width:684px; height:106px;}
+.remake-name{ height:80px; line-height:80px; font-size:18px;}
+#user img{  width:70%; margin:0 15%;}
+.remake-info{ width:80%; margin-left:13%;}
+.form-group button{ margin-left:30%;}
+#user .btn{ padding:2px 3px;}
+#user .user-login{ width:100%; float:left;margin-top:6px; padding-right:25px;}
+}
+@media screen and (max-width:667px) {
+.header{ height:106px;}
+#user{ width:667px; height:106px;}
+.remake-name{ height:80px; line-height:80px; font-size:18px;}
+#user img{  width:70%; margin:0 15%;}
+#user .user-login{ width:100%; margin:0 auto;margin-top:6px; margin-right:20px;}
+.remake-info{ width:80%; margin-left:13%;}
+.form-group button{ margin-left:30%;}
+#user .btn{ padding:2px 3px;}
+}
+@media screen and (max-width:414px) {
+.header{ height:106px;}
+#user{ width:100%; height:106px;}
+#user img{ width:100%; float:left; margin:0; padding:0; margin-top:5px;}
+.remake-name{ height:80px; line-height:80px; font-size:18px;}
+
+.remake-info{ width:90%; margin-left:10%; }
+#user .user-login{ width:100%; float:left;margin-top:12px;}
+.form-group button{ margin-left:20%;}
+#user .btn{ padding:2px 3px;}
+}

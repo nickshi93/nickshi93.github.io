@@ -1,0 +1,342 @@
+{include file='public/header1'}
+
+<body class="layui-view-body">
+    <div class="layui-content">
+        <div class="layui-row">
+			 <div class="layui-page-header">
+            <div class="pagewrap">
+                <span class="layui-breadcrumb">
+                  <a href="">首页</a>
+                  <a><cite>文章管理</cite></a>
+                </span>
+            </div>
+        </div>
+			
+        <div class="layui-row">
+            <div class="layui-card">
+                <div class="layui-card-body">
+					<div class="table">
+						 搜索标题：
+						 <div class="layui-inline">
+							<input class="layui-input" name="keyword" id="demoReload" autocomplete="off">
+						</div>
+						<button class="layui-btn" id='search' data-type="reload">搜索</button>
+					</div>
+                    <div class="form-box">
+						<div class="layui-btn-group usertable">
+						  <button class="layui-btn" data-type="getCheckData"><i class="layui-icon">&#xe640;</i>删除</button>
+						 <!-- <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
+						  <button class="layui-btn" data-type="isAll">验证是否全选</button> -->
+						
+						</div>	
+						<button class="layui-btn " title="刷新当前页" href="javascript:void(0);"		onclick="layer.load(1);window.location.reload(true);"><i		class="layui-icon"></i>刷新</button>
+							
+					<!-- 显示/不显示模板 -->
+					<script type="text/html" id="switchTpl">
+					  <!-- 这里的 checked 的状态只是演示 -->
+					  <input type="checkbox" name="{{d.id}}" value="{{d.ishow}}" lay-skin="switch" lay-text="显示|禁止" lay-filter="ishow" {{ d.ishow == 1 ? 'checked' : '0' }}>
+					</script>
+					<!-- 置顶/不置顶模板 -->
+					<script type="text/html" id="switchtop">
+					  <!-- 这里的 checked 的状态只是演示 -->
+					  <input type="checkbox" name="{{d.id}}" value="{{d.top}}" lay-skin="switch" lay-text="置顶|禁止" lay-filter="top" {{ d.top == 1 ? 'checked' : '0' }}>
+					</script>
+					<!-- 文章图片 -->
+					<script type="text/html" id="imageTpl">
+					  <image src="{{d.coverimg}}" style='width:200px;height:auto' target="_blank">
+					</script>
+					<!-- 
+
+				   <script type="text/html" id="roleTpl">
+						  {{#  if(d.role == '0'){ }}
+							<span style="color:	#F581B1;">管理员</span>
+						  {{#  } else { }}
+							<span style="color: #eeee;">业务员</span>
+						  {{#  } }}
+					</script>角色模板 -->
+
+					<!-- 表单按钮 -->
+					<script type="text/html" id="barDemo">				 
+					    <div class="layui-btn-group">				
+						<!-- <a type="button" href="{:url('user/useredit')}?id={{d.id}}" class="layui-btn layui-btn-sm" ><i class="layui-icon"></i></a> -->
+						<a type="button" href="{:url('article/edit')}?aid={{d.id}}"  class="layui-btn layui-btn-sm" ><i class="layui-icon"></i></a>
+						<button type="button" class="layui-btn layui-btn-sm" lay-event="del"><i class="layui-icon"></i></button>
+					  </div>
+					</script>
+					
+                    </div>
+
+                </div>
+					<!-- 用户表信息start -->
+					<table class="layui-hide"  id="article" lay-filter="article"></table>			
+					<!-- 用户表信息end -->	
+           </div>
+
+	 </div>	
+
+<script src="/static/admin/layui/assets/layui.all.js"></script>
+
+<script>
+    layui.use('table', function(){
+        var table = layui.table,
+		$ = layui.jquery,
+		 form = layui.form;
+
+        //用户表信息
+        table.render({
+			//选择表格的id
+            elem: '#article'
+            ,url:"{:url('article/articleinfo')}" //数据接口
+			//开启分页
+            ,id:'tryReload'
+			,totalRow: true
+			,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+           //表格样式，隔行换色
+			,even:true
+			,page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+    	      layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+    	      //,curr: 5 //设定初始在第 5 页
+    	      ,limit:10 //一页显示多少条
+    	      ,limits:[10,20,30]//每页条数的选择项
+    	      ,groups: 2 //只显示 2 个连续页码
+    	      ,first: "首页" //不显示首页
+    	      ,last: "尾页" //不显示尾页
+    	      
+    	    }
+			,done: function (res, curr, count) {
+               layui.each($("select[name='role']"), function (index, item) {
+                   var elem = $(item);
+				
+                   elem.val(elem.data('value')).parents('div.layui-table-cell').css('overflow', 'visible');
+               });
+               form.render();
+           }
+            ,cols: [[ //表头
+				{type: 'checkbox', fixed: 'left',align:'center'}
+                ,{field: 'id', title: 'ID', width:80,  sort: true, fixed: 'left',align:'center'}
+                ,{field: 'title', title: '标题', width:100,edit: 'text',  align:'center'}
+				,{field: 'coverimg', title: '图片', templet: '#imageTpl', unresize: true}
+                ,{field: 'pv', title: '浏览量', edit: 'text',sort: true,align:'center'}
+                ,{field: 'author', title: '发布人',align:'center'}
+                ,{field: 'ishow', title: '显示/不显示', sort: true, align:'center',templet: '#switchTpl', unresize: true}
+                 ,{field: 'top', title: '置顶/不置顶', sort: true, align:'center',templet: '#switchtop', unresize: true}
+				 ,{title:"操作",toolbar:'#barDemo', width:180,align:'center'}
+               
+            ]]
+        });
+
+		//监听单元格编辑
+       table.on('edit(article)', function (obj) {
+             var value = obj.value;//修改后的数据
+             var field = obj.field;//修改的字段名
+             var data = obj.data;//修改的当行数据
+             //获取修改行的ID值
+             var id = data.id;                 
+			 $.post("{:url('article/update')}", { id: id, value: value, field: field }, function (data) {
+                 if (data.State) {
+                     layer.msg(data);
+                 }else{
+                      layer.msg(data);
+                 }
+            });
+         });
+		
+		//搜索
+		$('#search').click(function () {
+		   var inputVal = $('.layui-input').val()
+		   table.reload('tryReload', {
+				url: "{:url('article/titlesearch')}"
+				,methods:"post"
+				,request: {
+				  pageName: 'page' //页码的参数名称，默认：page
+				 ,limitName: 'limit' //每页数据量的参数名，默认：limit
+				}
+				,where: {
+				 title : inputVal
+				}
+				,page: {
+				 curr: 1
+				}
+		   });
+		});
+		
+		//批量删除文章
+		var $ = layui.$, active = {
+		getCheckData: function(){ //获取选中数据
+		  var checkStatus = table.checkStatus('tryReload')
+		  ,data = checkStatus.data;
+
+		  if(data==""){
+				layer.msg('选择一个或多个删除',{icon:2});
+
+				return;
+			
+			}
+			 delist=[];
+				data.forEach(function(n,i){
+		  
+				delist.push(n.id);
+			  
+			  });		  
+			
+			//parent.layer.msg('删除中...', {icon: 16,shade: 0.3,time:1000});
+			//layer.alert(JSON.stringify(data));
+			$.ajax({
+						  url:"{:url('article/delselarticle')}",
+						  type:'post',
+						  data:{
+							  id:delist		  
+						  },
+						  beforeSend:function () {
+							  //this.layerIndex = layer.load(0, { shade: [0.5, '#393D49'] });
+						  },
+						  success:function(data){
+							  if(data.status == 'error'){
+								  layer.msg(data.msg,{icon: 5});//失败的表情
+								  o.removeClass('layui-btn-disabled');
+								  return;
+							  }else{
+								  layer.msg(data.msg, {
+									  icon: 6,//成功的表情
+									  time: 1000 //1秒关闭（如果不配置，默认是3秒）
+								  }, function(){
+									  location.reload();
+								  });
+							  }
+						  },
+					});	  
+		}
+		,getCheckLength: function(){ //获取选中数目
+		  var checkStatus = table.checkStatus('tryReload')
+		  ,data = checkStatus.data;
+		
+		  layer.msg('选中了：'+ data.length + ' 个');
+		}
+		,isAll: function(){ //验证是否全选
+		  var checkStatus = table.checkStatus('tryReload');
+		  layer.msg(checkStatus.isAll ? '全选': '未全选')
+		}
+	  };
+
+
+		$('.usertable .layui-btn').on('click', function(){
+			var type = $(this).data('type');
+			active[type] ? active[type].call(this) : '';
+		 });
+
+	  //监听文章显示/不显示操作	  	 
+	  form.on('switch(ishow)', function(obj){
+		var id=this.name;	
+		var ishow=this.value;
+		 $.ajax({
+              url:"{:url('article/updateishow')}" ,//数据接口
+              type:'post',
+              data:{
+				  id:id,
+				  ishow:ishow	  			  
+			  },
+              beforeSend:function () {
+                  this.layerIndex = layer.load(0, { shade: [0.5, '#393D49'] });
+              },
+              success:function(data){
+                  if(data.status == 'error'){
+                      layer.msg(data.msg,{icon: 5});//失败的表情
+                      o.removeClass('layui-btn-disabled');
+                      return;
+                  }else{
+                      layer.msg(data.msg, {
+                          icon: 6,//成功的表情
+                          time: 1000 //1秒关闭（如果不配置，默认是3秒）
+                      }, function(){
+                          location.reload();
+                      });
+                  }
+			  },
+			  });
+
+	//	layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
+	  });
+
+	  //监听文章置顶/不置顶操作	  	 
+	  form.on('switch(top)', function(obj){
+		var id=this.name;	
+		var top=this.value;
+		 $.ajax({
+              url:"{:url('article/updatetop')}" ,//数据接口
+              type:'post',
+              data:{
+				  id:id,
+				  top:top	  			  
+			  },
+              beforeSend:function () {
+                  this.layerIndex = layer.load(0, { shade: [0.5, '#393D49'] });
+              },
+              success:function(data){
+                  if(data.status == 'error'){
+                      layer.msg(data.msg,{icon: 5});//失败的表情
+                      o.removeClass('layui-btn-disabled');
+                      return;
+                  }else{
+                      layer.msg(data.msg, {
+                          icon: 6,//成功的表情
+                          time: 1000 //1秒关闭（如果不配置，默认是3秒）
+                      }, function(){
+                          location.reload();
+                      });
+                  }
+			  },
+			  });
+
+	//	layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
+	  });
+  
+	  //监听工具条
+	  table.on('tool(article)', function(obj){
+		
+		var data = obj.data;
+		
+		if(obj.event === 'detail'){
+		 
+		  layer.msg('ID：'+ data.id + ' 的查看操作');
+		
+		} else if(obj.event === 'del'){   //删除用户
+				var id=data.id;
+				layer.confirm('真的删除文章？', function(index){
+				obj.del();
+				layer.close(index);			
+				$.ajax({
+				  url:"{:url('article/delselarticle')}",
+				  type:'post',
+				  data:{
+					  id:id,	  
+				  },
+				  beforeSend:function () {
+					  this.layerIndex = layer.load(0, { shade: [0.5, '#393D49'] });
+				  },
+				  success:function(data){
+					  if(data.status == 'error'){
+						  layer.msg(data.msg,{icon: 5});//失败的表情
+						  o.removeClass('layui-btn-disabled');
+						  return;
+					  }else{
+						  layer.msg(data.msg, {
+							  icon: 6,//成功的表情
+							  time: 1000 //1秒关闭（如果不配置，默认是3秒）
+						  }, function(){
+							  location.reload();
+						  });
+						}
+					 },
+				  });
+		  });
+
+		} 
+	  });
+  
+	  
+	
+ });
+
+</script>
+
+{include file='public/foot2'}

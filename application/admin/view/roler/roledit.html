@@ -28,14 +28,24 @@
 									  <div class="layui-form-item" pane>
 										<label class="layui-form-label">权限</label>
 											<div class="layui-input-block" style='width:50%'>
-											{foreach $menu as $k=>$a}							
-												<input type="checkbox" name="role[]" value='{$a.id}' lay-skin="primary" {in name="$a.id" value='$authority'}checked {/in} title="{$a.name}">	
-												{foreach $a['child'] as $b}						
-														<input type="checkbox" name="role[]" value='{$b.id}' lay-skin="primary" {in name="$a.id" value='$authority'}checked {/in} title="{$b.name}">	
-												{/foreach}
-												<br>
-											{/foreach}		
+											<div class="layui-collapse" lay-accordion="" style='border:none;'>
+												{foreach $menu as $k=>$a}
+												  <div class="layui-colla-item"style='border:none'>
+											<a id='nv'class="layui-colla-title"style='border:none'>
+														<input type="checkbox" name="role[]" value='{$a.id}' lay-skin="primary" {in name="$a.id" value='$authority'}checked {/in} title="{$a.name}">
+													</a>
+												<div class="layui-colla-content"style='border:none'>
+														{foreach $a['child'] as $b}	
+														----- <input type="checkbox" name="role[]" value='{$b.id}' lay-skin="primary" {in name="$a.id" value='$authority'}checked {/in} title="{$b.name}"><br>
+														{/foreach}
 											
+													</div>
+												  </div>
+												  {/foreach}
+												<br>
+												</div>
+											
+											</div>
 											</div>
 									  </div>
 
@@ -55,8 +65,8 @@
 			</div>		 
 		 </div>	
 	</div>
-	
-	
+
+
 <script src="/static/admin/layui/assets/layui.js"></script>
 
 <script src="/static/admin/layui/assets/layui.all.js"></script>

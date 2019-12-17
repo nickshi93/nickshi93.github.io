@@ -230,6 +230,44 @@
 			
 			
 		}
+		//文章页面
+		public function article(){
+			
+			//Cookie::delete('name');
+			if(cookie::has('name')){
+				
+				$art = new Article();
+			
+				return $art ->index();			
+						
+			}else{
+				
+				$this->redirect('login/index');
+				
+			}	
+			
+			
+			
+		}
+		
+		//新增文章
+		public function addarticle(){
+			
+			//Cookie::delete('name');
+			if(cookie::has('name')){
+				
+				$art = new Addarticle();
+			
+				return $art ->index();			
+						
+			}else{
+				
+				$this->redirect('login/index');
+				
+			}	
+			
+			
+		}
 		
 
 		

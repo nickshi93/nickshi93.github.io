@@ -86,7 +86,7 @@
 				'pid'=>$id,
 				
 				'sortid'=>$sortid,
-
+				
 				'is_show'=>$ishow,
 				
 				'url'=>$template

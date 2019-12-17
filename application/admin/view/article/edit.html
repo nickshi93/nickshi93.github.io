@@ -1,0 +1,184 @@
+{include file='public/header1'}
+<body class="layui-view-body">
+    <div class="layui-content">
+        <div class="layui-row" >
+			 <div class="layui-page-header">
+				<div class="pagewrap">
+					<span class="layui-breadcrumb">
+					  <a>首页</a>
+					   <a href='index'>文章管理</a>
+					  <a><cite>文章编辑</cite></a>
+					</span>
+				</div>		 
+			  </div>			
+			<div class="layui-row" style='margin:0 auto'>
+				<div class="layui-card" style='min-height:500px;'>
+					 <div class="layui-card-body">
+						 <div class="form-box">
+							<form class="layui-form layui-form-pane1" action="{:url('article/updatearticle')}" lay-filter="first">
+								{foreach $article as $a}
+								 <div class="layui-form-item">
+										<label class="layui-form-label">标题</label>
+										<div class="layui-input-inline">
+										  <input type="text" name="title" lay-verify="required"  class="layui-input" value='{$a.title}' placeholder='请输入我文章标题' >
+										</div>
+								  </div>
+								 	<input type='hidden' value='{$a.id}' name='id'>							 
+								 <div class="layui-form-item">
+									<div class="layui-inline">
+									  <label class="layui-form-label">文章分类</label>
+									  <div class="layui-input-inline">
+										<select name="category">
+										  <option value="">请选择分类</option>
+										  {foreach $data as $cat}
+											<optgroup label="{$cat.name}">{$cat.name}</optgroup>
+											  {foreach $cat['child'] as $b}
+													<option value="{$b.id}" {if condition ='$b.id eq $a.category'}selected{/if}>{$b.name}</option>
+											  {/foreach}										
+										  {/foreach}							
+										</select>
+									  </div>
+								</div>
+								
+								<div class="layui-form-item">
+									<label class="layui-form-label">发布人</label>
+									<div class="layui-input-inline">
+										<input type="text" name="author" lay-verify="required"  class="layui-input"  value='{$a.author}'>
+									</div>
+								</div>
+								<div class="layui-form-item">
+								  <div class="layui-inline">
+									  <label class="layui-form-label">发布时间</label>
+									  <div class="layui-input-inline">
+										<input type="text" class="layui-input" name='newsdate' id="newsdate" placeholder="yyyy-MM-dd HH:mm:ss" value='{$a.newsdate}'>
+									  </div>
+								</div>
+								 
+								 <div class="layui-form-item">
+										<label class="layui-form-label">访问量</label>
+										<div class="layui-input-inline">
+										  <input type="text" name="pv" class="layui-input"  value='{$a.pv}' >
+										</div>
+								 </div>
+
+								  <div class="layui-form-item">
+										<label class="layui-form-label">封面图片</label>
+										<div class="layui-input-inline">
+										 <div class="layui-upload">
+											 <div class="layui-upload-list" style='float:left'>
+												<img  class="layui-upload-img" src='{$a.coverimg}' id="imgnews" style='width:100px;height:auto;'>
+												<p id="demoText"></p>
+											  </div>
+											  <button type="button" class="layui-btn" id="newsimg">上传图片</button>
+											</div>   
+										</div>
+								  </div>
+								  <input type='hidden' name='artimg' value='{$a.coverimg}' >
+								
+								  <div class="layui-form-item">
+										<label class="layui-form-label">文章内容</label>
+										 <div class="layui-input-block">
+											 <textarea name="artcontent" lay-verify="required" id="artcontent" value='' class="layui-hide">{$a.artcontent}		
+											 </textarea>
+										</div>
+								  </div>
+								 <div class="layui-form-item layui-form-text">
+									<label class="layui-form-label">文章描述</label>
+									<div class="layui-input-block">
+									  <textarea name='descript'  placeholder="请输入内容" class="layui-textarea" value=''>{$a.descript}</textarea>
+									</div>
+								  </div>
+
+								   <div class="layui-form-item">
+									<label class="layui-form-label">显示</label>
+									<div class="layui-input-block">
+									  <input type="radio" name="ishow" value="1" title="是" {if condition='$a.ishow eq 1' }checked {/if}>
+									  <input type="radio" name="ishow" value="0" title="否"{if condition='$a.ishow eq 0' }checked {/if}>
+									</div>
+								  </div>
+								   <div class="layui-form-item">
+									<label class="layui-form-label">置顶</label>
+									<div class="layui-input-block">
+									  <input type="radio" name="top" value="1" title="是" {if condition='$a.top eq 1' }checked {/if}>
+									  <input type="radio" name="top" value="0" title="否" {if condition='$a.top eq 0' }checked {/if}>
+									</div>
+								  </div>
+								   <div class="layui-form-item">
+									<div class="layui-input-block">
+									  <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+									  <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+									</div>
+								  </div>
+								 {/foreach}
+							</form>
+						 </div>
+					</div>
+				</div>
+			</div>		 
+		 </div>	
+	</div>
+
+
+<script src="/static/admin/layui/assets/layui.js"></script>
+
+<script src="/static/admin/layui/assets/layui.all.js"></script>
+<script type="text/javascript">
+layui.use('layedit',
+function() {
+    var layedit = layui.layedit;
+    layedit.set({
+        uploadImage: {
+             url: "{:url('addarticle/uploadimg')}"
+            ,type: 'post'
+        }
+    });
+    layedit.build('artcontent'); //建立编辑器
+});
+
+//日期时间选择器
+layui.use('laydate', function(){
+	var laydate = layui.laydate;
+		laydate.render({
+			elem: '#newsdate'
+			,type: 'datetime'
+		  });
+
+});
+  
+layui.use('upload', function(){
+  var $ = layui.jquery
+  ,upload = layui.upload;
+  
+  //封面图片上传
+  var uploadInst = upload.render({
+    elem: '#newsimg'
+    ,url: "{:url('addarticle/artimg')}"
+    ,before: function(obj){
+      //预读本地文件示例，不支持ie8
+      obj.preview(function(index, file, result){
+        $('#imgnews').attr('src', result); //图片链接（base64）
+      });
+    }
+    ,done: function(res){
+      //如果上传成功
+      if(res.code > 0){
+        return layer.msg('上传成功');
+      }
+      //上传成功
+    }
+    ,error: function(){
+      //演示失败状态，并实现重传
+      var demoText = $('#demoText');
+      demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+      demoText.find('.demo-reload').on('click', function(){
+        uploadInst.upload();
+      });
+    }
+  });
+  
+ 
+  
+});
+</script>
+
+{include file='public/foot2'}

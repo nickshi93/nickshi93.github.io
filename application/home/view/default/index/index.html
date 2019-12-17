@@ -1,17 +1,19 @@
 {include file="public/header" title='$title'}
-
-  <!-- Swiper -->
-    <div class="swiper-container">
-        <div class="swiper-wrapper">
-			{foreach $banner as $images}
+<!-- Swiper 轮播-->
+<div class="swiper-container">
+	<div class="swiper-wrapper">
+		{foreach $banner as $images}
             <div class="swiper-slide"><img src="{$images.image_address}" width="100%" height="auto" border="0" alt=""></div>
-			{/foreach}
-        </div>
-        <!-- Add Pagination -->
-        <div class="swiper-pagination"></div>
-        <!-- Add Pagination -->
-        <div class="swiper-button-next"></div>
-        <div class="swiper-button-prev"></div>
+		{/foreach}
     </div>
-
+    <!-- Add Pagination -->
+    <div class="swiper-pagination"></div>
+    <!-- Add Pagination -->
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+</div>
+  
+<div id="" class="" style='width:100%;height:300px;'>
+	
+</div>
 {include file='public/footer'}

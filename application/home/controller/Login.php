@@ -19,6 +19,12 @@
 			
 			$data =$common ->index();
 			
+			$token =$this->request->token('_token_');//生成令牌
+			
+			Cookie::set('token',$token);
+			
+			$this->assign('token',$token);	
+			
 			$this->assign('data',$data);	
 			
 			$this->assign('title',$title);		
@@ -26,9 +32,17 @@
 			return $this->fetch();
 		}
 		//前端手机号验证码登录	
-		public function phoneLogin($phone,$code){
+		public function phoneLogin($phone,$code,$token){
 
 			$verifycode =(Session::get('yzm'));
+			
+			$ctoken = Cookie::get('token');
+			
+			if($token!==$ctoken){
+				
+				$this->error('表单已提交');
+				
+			}
 			
 			if($verifycode!==md5($code)){
 				
@@ -79,7 +93,7 @@
 			
 		}
 		//前端登录
-		public function login($username,$password,$captcha){
+		public function login($username,$password,$captcha,$token){
 			
 			Cookie::delete('user');
 			// 处理验证码
@@ -88,6 +102,14 @@
 				$this->error('验证码错误');
 			
 			};
+			
+			$ctoken = Cookie::get('token');
+			
+			if($token!==$ctoken){  //令牌验证
+				
+				$this->error('表单已提交');
+				
+			}
 			
 			$psd =md5(md5($password));
 			
@@ -147,6 +169,8 @@
 			
 			Cookie::delete('user');
 			
+			Cookie::delete('token');
+		
 			$this->success('退出成功','index');
 		}
 		

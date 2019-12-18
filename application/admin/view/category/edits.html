@@ -45,8 +45,8 @@
 											<div class="layui-input-inline">
 												<select name="template" lay-filter="interest">
 													<option value=""></option>
-													<option value="news"  {if condition="$b.url neq    'news'"}selected{/if}> 新闻模板</option>			
-													<option value="goods"  {if condition="$b.url neq    'goods'"}selected{/if}>商品模板</option>
+													<option value="news"  {if condition="$a.url eq   'news'"}selected{/if}> 新闻模板</option>			
+													<option value="goods"  {if condition="$a.url eq  'goods'"}selected{/if}>商品模板</option>
 																	
 												</select>											
 										   </div>

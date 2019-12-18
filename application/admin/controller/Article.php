@@ -239,7 +239,7 @@
 				
 			}
 			
-			$time = date('Y-m-d',time());
+			$time = time();
 			
 			$data =[
 			

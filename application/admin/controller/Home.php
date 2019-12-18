@@ -3,16 +3,23 @@
 	namespace app\admin\controller;
 	
 	use think\controller;
+	
 	use think\Db;
 	
 	class Home extends controller{
 		
 		function index(){			
 			
-		/*	$com = new Common();
+			$com = new Common();
 			
-			$com ->index(); //调用常规数据	*/
+			$member = $com ->totaltable('member'); 
 			
+			$article = $com ->totaltable('article'); 
+			
+			$this->assign('member',$member);
+			
+			$this->assign('article',$article);
+		
 			return $this->fetch('home/index');
 			
 		}

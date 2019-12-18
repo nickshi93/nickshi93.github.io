@@ -32,6 +32,14 @@
 			
 			
 		}
+		
+		//统计各表单个数
+		public function totaltable($table){
+			
+			return $total =Db($table)->count();
+			
+		}
+		
 		//查询用户列表权限
 		public function userole(){
 			
@@ -62,12 +70,14 @@
 			return  Db::table($table)->insert($data);  //插入数据
 		
 		}
+		
 		/*新增多条数据*/
 		public function addall($data,$table){
 		
 			return  Db::table($table)->insertAll($data);  //插入多条数据
 		
 		}
+		
 		//删除数据
 		public function deletes($table,$condition1,$condition2,$condition3){
 		
@@ -75,14 +85,6 @@
 
 		}
 
-		function selectdata(){
-			
-			
-			
-			
-			
-		}
-		
 		public function updates($table,$condition1,$condition2,$condition3,$condition4){
 			
 			

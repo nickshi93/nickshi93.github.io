@@ -86,30 +86,40 @@
 			
 			$thumb = Db('artlike')->where('userid',$uid)->where('artid',$id)->where('status',1)->select(); //查询用户是否已经点赞该文章
 			
-			if(!$thumb){
+			if(!$thumb){ //先排除已经点赞的情况下
 				
-				$data = [
+				$thumbs = Db('artlike')->where('userid',$uid)->where('artid',$id)->where('status',0)->select();
+				
+				if($thumbs){ //再排除点赞后取消点赞的情况
+					
+					$data = [
+						
+						'status' =>1,
+					
+					];
+	
+					$artlike =Db('artlike')->where('artid',$id)->where('userid',$uid)->update($data);
+					
+				}else{
+					
+					$data = [
 			
-				'userid'=>$uid,
+					'userid'=>$uid,
+					
+					'artid'=>$id,
+					
+					'addtime'=>time(),
 				
-				'artid'=>$id,
-				
-				'addtime'=>time(),
-			
-				];
-				
-				$artlike =Db('artlike')->insert($data);
-				
-				$num =Db('artlike')->where('artid',$id)->where('status','1')->count();
-				
-				return $num;
-				
-			}else{
-				
-				$num =Db('artlike')->where('artid',$id)->where('status','1')->count();
-				
-				return $num;
+					];
+					
+					$artlike =Db('artlike')->insert($data);
+				}
+								
 			}
+			
+				$num =Db('artlike')->where('artid',$id)->where('status','1')->count();
+				
+				return $num;
 			
 			
 		}

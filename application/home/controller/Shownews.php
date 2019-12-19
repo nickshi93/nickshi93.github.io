@@ -16,9 +16,7 @@
 			$common =new Common();
 			
 			$article =Db('article')->where('id',$id)->select();
-			
-			$this->assign('artid',$id);//文章ID
-			
+		
 			$common ->pagenext($id); //下一篇文章
 			
 			$common ->pageprev($id); //上一篇文章
@@ -27,17 +25,22 @@
 				
 				$title =$a['title'];
 				
-				$id =$a['category'];
+				$cid =$a['category']; 
 				
 			}
-			
+			$thumb =Db('artlike')->where('artid',$id)->where('status','1')->count();//文章点赞数
+
 			$coms =$common->common();//常用头部数据信息
 			
 			$this->assign('title',$title); //赋值标题
 
-			$this->assign('id',$id);//文章所属栏目ID
+			$this->assign('id',$cid);//文章所属栏目ID
+			
+			$this->assign('artid',$id);//文章ID
 			
 			$this->assign('article',$article);  //文章内容
+			
+			$this->assign('thumb',$thumb);  //文章点赞数
 						
 			return $this->fetch('news/shownews');
 			
@@ -69,5 +72,78 @@
 			
 		}
 		
+		//文章点赞
+		public function thumb($id){
+			
+			$user = Cookie::get('user');
+	
+			$user =Db('member')->where('phone',$user)->whereor('username',$user)->select();
+			
+			foreach ($user as $a){
+				
+				$uid =$a['id'];
+			}			
+			
+			$thumb = Db('artlike')->where('userid',$uid)->where('artid',$id)->where('status',1)->select(); //查询用户是否已经点赞该文章
+			
+			if(!$thumb){
+				
+				$data = [
+			
+				'userid'=>$uid,
+				
+				'artid'=>$id,
+				
+				'addtime'=>time(),
+			
+				];
+				
+				$artlike =Db('artlike')->insert($data);
+				
+				$num =Db('artlike')->where('artid',$id)->where('status','1')->count();
+				
+				return $num;
+				
+			}else{
+				
+				$num =Db('artlike')->where('artid',$id)->where('status','1')->count();
+				
+				return $num;
+			}
+			
+			
+		}
 		
-	}
+		//取消点赞
+		public function delthumb($id){
+			
+			$user = Cookie::get('user');
+	
+			$user =Db('member')->where('phone',$user)->whereor('username',$user)->select();
+			
+			foreach ($user as $a){
+				
+				$uid =$a['id'];
+			}
+			
+			$data = [
+			
+				'userid'=>$uid,
+				
+				'artid'=>$id,
+				
+				'status'=>'0',
+				
+				'addtime'=>time(),
+			
+			];
+			
+			$artlike =Db('artlike')->where('artid',$id)->where('userid',$uid)->update($data);
+			
+			$num =Db('artlike')->where('artid',$id)->where('status','1')->count();
+			
+			return $num;
+			
+		}
+}
+		

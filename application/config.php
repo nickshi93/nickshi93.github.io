@@ -39,7 +39,7 @@ return [
     // 默认时区
     'default_timezone'       => 'PRC',
     // 是否开启多语言
-    'lang_switch_on'         =>true,
+    'lang_switch_on'         => true,
 	//语言列表
 	'lang_list' 			 => ['zh-cn','en-us'],
     // 默认全局过滤方法 用逗号分隔多个
@@ -195,6 +195,19 @@ return [
         // 缓存有效期 0表示永久缓存
         'expire' => 0,
     ],
+	
+	  //redis缓存设置
+        'redis'   =>  [
+            // 驱动方式
+            'type'   => 'redis',
+            // 服务器地址
+            'host'   => '127.0.0.1',  //redis服务器ip
+            'password' => '',
+            'port'   => '6379',
+            'password'=> "",
+            'timeout' => 3600
+        ], 
+        
 
     // +----------------------------------------------------------------------
     // | 会话设置
@@ -248,6 +261,9 @@ return [
         'var_page'  => 'page',
         'list_rows' => 15,
     ],
+	
+	//对请求的变量进行自动过滤
+	'default_filter' => 'htmlspecialchars,addslashes,strip_tags',
 	
 	//验证码配置
 	'captcha'  => [

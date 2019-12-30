@@ -7,7 +7,7 @@
 	
 	use think\Cookie;
 	
-	class Addarticle extends Controller{
+	class Addarticle extends Base{
 		
 		public function index(){
 			

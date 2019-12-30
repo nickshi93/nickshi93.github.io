@@ -6,7 +6,7 @@
 	
 	use think\Db;
 	
-	class Upload extends Controller{
+	class Upload extends Base{
 		
 		public function upload(){        
        

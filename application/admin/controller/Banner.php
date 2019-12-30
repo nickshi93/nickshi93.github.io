@@ -7,7 +7,7 @@
 	
 	use think\Db;
 	
-	Class Banner extends  Controller{
+	Class Banner extends  Base{
 		
 		public function index(){
 					

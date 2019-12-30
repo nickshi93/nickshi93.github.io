@@ -6,7 +6,7 @@
 	
 	use think\Db;
 	
-	class member extends Controller{
+	class member extends Base{
 		
 		public function index(){
 
@@ -125,7 +125,7 @@
 				
 			$updateused->updates($table,'id',$id,'password',$psd);
 			
-			return $this->success('重置密码为:123456');
+			return $this->success('会员重置密码为:123456');
 					
 		}
 		//新增会员

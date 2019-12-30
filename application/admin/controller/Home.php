@@ -2,13 +2,11 @@
 
 	namespace app\admin\controller;
 	
-	use think\controller;
+	use think\Controller;
 	
-	use think\Db;
-	
-	class Home extends controller{
+	class Home extends Base{
 		
-		function index(){			
+		public function index(){			
 			
 			$com = new Common();
 			

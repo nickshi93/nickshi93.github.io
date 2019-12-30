@@ -12,21 +12,13 @@
 	
 	use think\Request;
 
-	class Index extends Controller{
-	   
+	class Index extends Base{
+		
 	   //后台首页	
 	   public function index()
 	   
 	   {	   	   
 			//Cookie::delete('name');
-			if(cookie::has('name')){
-								
-						
-			}else{
-				
-				$this->redirect('login/index');
-				
-			}
 			
 			$title ="后台首页";
 			
@@ -40,235 +32,131 @@
 	
 			$com ->index(); //调用常规数据	
 			
-			//获取当前域名
 			$request = Request::instance();
 			
-			$domain = $request->domain();
+			$domain = $request->domain();//获取当前域名
 			
 			$this->assign('website',$domain);	//前台首页链接
 		
 			return $this->fetch();
+			
 			//return $this->fetch('/goods/index'); //引用goods文件下的index.html
 			
 		}
 		
 		//商品页面
-		public function goods(){
+		public function goods()
+		{
+		
+			$goods = new Goods();
 			
-			//Cookie::delete('name');
-			if(cookie::has('name')){
-				
-				$goods = new Goods();
-			
-				return $goods ->index();
-						
-			}else{
-				
-				$this->redirect('login/index');
-				
-			}
-
-			
+			return $goods ->index();
 					
 		}
 		//用户页面
-		public function user(){
+		public function user()
+		{
+	
+			$user = new User();
 			
-			//Cookie::delete('name');
-			if(cookie::has('name')){
+			return $user ->index();
 				
-				$user = new User();
-			
-				return $user ->index();
-									
-			}else{
-				
-				$this->redirect('login/index');
-				
-			}
-						
 		}
 		//会员页面
-		public function member(){
+		public function member()
+		{
+
+			$user = new Member();
 			
-			//Cookie::delete('name');
-			if(cookie::has('name')){
+			return $user ->index();
 				
-				$user = new Member();
-			
-				return $user ->index();
-									
-			}else{
-				
-				$this->redirect('login/index');
-				
-			}
-						
 		}
 	
 	
-		public function userlog(){
+		public function userlog()
+		{
 			
-			//Cookie::delete('name');
-			if(cookie::has('name')){
-				
-				$userlog = new Userlog();
+			$userlog = new Userlog();
 			
-				return $userlog ->index();
-									
-			}else{
-				
-				$this->redirect('login/index');
-				
-			}
-					
+			return $userlog ->index();
+												
 		}
 		//首页
-		public function home(){
+		public function home()
+		{
+		
+			$home = new Home();
 			
-			//Cookie::delete('name');
-			if(cookie::has('name')){
-				
-				$home = new Home();
-			
-				return $home ->index();			
-						
-			}else{
-				
-				$this->redirect('login/index');
-				
-			}
-			
+			return $home ->index();			
+		
 			
 		}
 		//角色页面
-		public function roler(){
+		public function roler()
+		{
+
+			$role = new Roler();
 			
-			//Cookie::delete('name');
-			if(cookie::has('name')){
+			return $role ->index();		
 				
-				$role = new Roler();
-			
-				return $role ->index();		
-						
-			}else{
-				
-				$this->redirect('login/index');
-				
-			}
-						
 		}
 		
 		//修改个人资料
-		public function changedetail(){
+		public function changedetail()
+		{
 			
-			//Cookie::delete('name');
-			if(cookie::has('name')){
-				
-				$user = new User();
+			$user = new User();
 			
-				return $user ->changedetail();			
-						
-			}else{
-				
-				$this->redirect('login/index');
-				
-			}			
-			
+			return $user ->changedetail();			
+		
 		}
 		
 		//栏目页面
-		public function  category(){
+		public function  category()
+		{
+	
+			$category = new Category();
 			
-			//Cookie::delete('name');
-			if(cookie::has('name')){
-				
-				$category = new Category();
-			
-				return $category ->index();
-									
-			}else{
-				
-				$this->redirect('login/index');
-				
-			}				
-			
+			return $category ->index();
+
 		}
 		//轮播图管理页面
-		public function  banner(){
-			
-			//Cookie::delete('name');
-			if(cookie::has('name')){
+		public function  banner()
+		{
 				
-				$banner = new Banner();
+			$banner = new Banner();
 			
-				return $banner ->index();			
-						
-			}else{
-				
-				$this->redirect('login/index');
-				
-			}				
-			
+			return $banner ->index();			
+										
 		}
 		
 		//阿里大鱼短信
-		public function  dysms(){
-			
-			//Cookie::delete('name');
-			if(cookie::has('name')){
+		public function  dysms()
+		{
 				
-				$sms = new Dysms();
+			$sms = new Dysms();
 			
-				return $sms ->index();			
-						
-			}else{
-				
-				$this->redirect('login/index');
-				
-			}		
-			
-			
+			return $sms ->index();			
+		
 		}
 		//文章页面
-		public function article(){
+		public function article()
+		{
+
+			$art = new Article();
 			
-			//Cookie::delete('name');
-			if(cookie::has('name')){
-				
-				$art = new Article();
-			
-				return $art ->index();			
-						
-			}else{
-				
-				$this->redirect('login/index');
-				
-			}	
-			
-			
-			
+			return $art ->index();			
+	
 		}
 		
 		//新增文章
-		public function addarticle(){
-			
-			//Cookie::delete('name');
-			if(cookie::has('name')){
-				
-				$art = new Addarticle();
-			
-				return $art ->index();			
-						
-			}else{
-				
-				$this->redirect('login/index');
-				
-			}	
-			
-			
-		}
-		
+		public function addarticle()
+		{
 
+			$art = new Addarticle();
+			
+			return $art ->index();			
+						
+		}
 		
 	}

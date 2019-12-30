@@ -6,7 +6,7 @@
 	
 	use think\Db;
 	
-	class Dysms extends Controller{
+	class Dysms extends Base{
 
 		public function index(){
 			

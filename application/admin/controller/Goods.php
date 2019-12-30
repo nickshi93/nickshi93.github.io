@@ -10,12 +10,7 @@
 	
 	use think\Cookie;
 
-	class Goods extends Controller{
-		
-		public function _initialize(){
-			
-				
-		}
+	class Goods extends Base{
 
 		public function index()
 		{

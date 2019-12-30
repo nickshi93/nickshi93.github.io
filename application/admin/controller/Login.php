@@ -12,9 +12,9 @@
 	
 	//use think\captcha;
 	
-	class Login extends Controller{		
-		
-		
+	class Login extends Controller
+	{		
+
 		//登录页面
 		public function index(){
 						
@@ -36,7 +36,7 @@
 				$result =Db::table('tp_admin')->where('username',$account)->where('used','=','1')->where('password',$passwd)->find();			
 
 				$time =date('Y-m-d H:i:s',time());				
-	
+				
 				if($result !== null){				
 						
 					$update =new Common();
@@ -70,6 +70,8 @@
 				return		$this->redirect('login/index');
 	
 		}
+	
+	
 	}	
 	
 	

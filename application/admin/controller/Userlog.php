@@ -4,7 +4,7 @@
 	
 	use think\controller;
 	
-	class Userlog extends controller{
+	class Userlog extends Base{
 		
 		function index(){
 			

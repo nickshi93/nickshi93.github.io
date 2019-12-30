@@ -6,11 +6,11 @@
 	
 	use think\Db;
 	
-	class Category extends Controller{
+	class Category extends Base{
 		
 		public function index()
 		{
-					
+			
 			$category =Db::table('tp_category')->where('pid','0')->select();
 			
 			$this->assign('category',$category);

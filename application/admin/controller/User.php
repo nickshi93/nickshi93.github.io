@@ -30,6 +30,8 @@
 			
 			$role = $com ->selectable($table);
 			
+			$token =$this->request->token('_token_');//生成令牌
+			
 			$this->assign('role',$role);  
 			
 			$this->assign('pages',$pages);
@@ -80,13 +82,14 @@
 				
 				$this->error('管理员用户无法删除');
 				
-				return;
+				return false;
 			}
-			$table ='tp_admin';
 			
-			$delete =new Common();
-			
-			$delete->deletes($table,'id','=',$id);
+			$user =New UserModel();
+				
+			$condition =['id'=>$id];
+
+			$user->deluser($condition);
 			
 			$this->Success('删除用户成功');
 
@@ -95,7 +98,11 @@
 		//新增用户
 		public function adduser($username,$password,$re_pwd,$used,$role){
 			
-			$users = Db::table('tp_admin')->where('username',$username)->count();
+			$user =New UserModel(); //实例化模型
+			
+			$condition=['username'=>$username];
+			
+			$users = $user->usercount($condition);
 			
 			if($users>0){
 			
@@ -104,9 +111,7 @@
 			}
 				
 			$password =md5(md5($password));
-			
-			$user =New UserModel(); //实例化模型
-				
+
 			$user->adduser($username,$password,$used,$role);
 				
 			return $this->success('新增'.$username.'用户成功');
@@ -115,14 +120,16 @@
 		
 		//重置用户密码
 		public function resetpsd($id){
-			
-			$table ='tp_admin';
-			
+		
 			$psd =md5(md5(123456));
 			
-			$updateused =new Common();
+			$user = New UserModel();
+			
+			$condition =['id'=>$id];
+			
+			$data =['password'=>$psd,];
 				
-			$updateused->updates($table,'id',$id,'password',$psd);
+			$user->updateuser($condition,$data);
 			
 			return $this->success('重置密码为:123456');
 			
@@ -130,31 +137,27 @@
 		
 		//更新用户状态
 		public function updataused($id,$used){
-			
-				$field = 'id';
-				
-				$field1 ='used';
-			
-				$table ='tp_admin';	
+	
+			$user =New UserModel(); //实例化模型	
 
-				$user =New UserModel(); //实例化模型					
+			$condition = ['id'=>$id];				
 			
-				if($used=='1'){
-				
-					$used='0';
-								
-					$user->updateuser($table,$field,$id,$field1,$used); 
-									
-					$this->Success('禁用用户成功');
-				
-				}else{
+			if($used=='1'){
 					
-					$used='1';
+				$data =['used'=>'0'];
+								
+				$user->updateuser($condition,$data); 
+									
+				$this->Success('禁用用户成功');
 				
-					$user->updateuser($table,$field,$id,$field1,$used); 
-			
-					$this->Success('启用用户成功');
-				}
+			}else{
+					
+				$data =['used'=>'1'];
+
+				$user->updateuser($condition,$data); 
+		
+				$this->Success('启用用户成功');
+			}
 			
 		}
 		
@@ -173,12 +176,12 @@
 					
 					return;
 				}
-				
-				$table ='tp_admin';
 			
-				$delete =new Common();
+				$user =New UserModel();
 				
-				$delete->deletes($table,'id','=',$id);
+				$condition =['id'=>$id];
+
+				$user->deluser($condition);
 							
 			}
 			$this->Success('删除用户成功');								
@@ -189,9 +192,9 @@
 			
 			$user =New UserModel(); //实例化模型
 			
-			$field ='id';
+			$condition =['id'=>$id];
 			
-			$users = $user->selectuser($field,$id);  //查询用户信息
+			$users = $user->userinfo($condition);  //查询用户信息
 			
 			$table ='tp_role';
 				
@@ -202,25 +205,22 @@
 			$this->assign('role',$role);  //角色列表
 			
 			$this->assign('user',$users);
-					
+			
 			return $this->fetch('user/edit');					
 		}
 		
 		//更新编辑后的用户权限
 		public function updateuser($id,$role){
-			
-			$table ='tp_admin';
-			
+		
 			$user =New UserModel(); //实例化模型	
 			
-			$field ='id';
-
-			$field1 ='role';
+			$condition =['id'=>$id];
 			
-			$user->updateuser($table,$field,$id,$field1,$role); 
+			$data =['role'=>$role];
+			
+			$user->updateuser($condition,$data); 
 			
 			$this->success('用户编辑成功');
-
 								
 		}
 		
@@ -229,9 +229,13 @@
 			
 			$name =cookie::get('name'); //用户名
 			
-			$user =Db('admin')->where('username',$name)->find();
+			$user =New UserModel();
 			
-			$img =$user['img'];
+			$data =['username'=>$name];
+			
+			$users = $user->edituserinfo($data);
+			
+			$img = $users['img'];
 			
 			$this->assign('image',$img);
 
@@ -245,16 +249,14 @@
 		public function userupdate($username,$password){
 			
 			$psd =md5(md5($password));
-					
-			$table ='tp_admin';
 			
 			$user =New UserModel(); //实例化模型	
-
-			$field ='username';
 			
-			$field1 ='password';
+			$condition =['username'=>$username];
 			
-			$user->updateuser($table,$field,$username,$field1,$psd); 
+			$data =['password'=>$psd];
+			
+			$user->updateuser($condition,$data); 
 			
 			$this->success('用户'.$username.'编辑成功');
 											

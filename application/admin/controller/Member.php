@@ -4,6 +4,8 @@
 	
 	use think\Controller;
 	
+	use app\admin\model\MemberModel;
+	
 	use think\Db;
 	
 	class member extends Base{
@@ -16,6 +18,8 @@
 		
 		//会员信息
 		public function memberinfo($limit,$page){
+			
+			$member = new MemberModel();
 			//获取每页显示的条数
 		    $limits = $limit;
 		   //获取当前页数
@@ -23,7 +27,7 @@
 			//计算出从那条开始查询
 		    $tol = $pages *	$limits;
 				   
-			$count = Db('member')->count();   //统计总个数
+			$count = $member->membercount();   //统计总个数
 		
 			$countpage = ceil($count /$limits);  //总页数
 			
@@ -33,19 +37,20 @@
 			
 			$list['count']=$count;  //总条数
 
-			$data = Db('member')->select(); 	
+			$data = $member->memberinfo(); 	
 			
 			$list['data']=$data;
 			
 			return json($list);
-			
-			$member =Db('member')->select();
-			
-			return json($member);
+		
 		}
 		
 		//更新会员状态启用/禁用
 		public function updatestatus($id,$status){
+			
+			$member = new MemberModel();
+			
+			$condition =['id'=>$id];
 				
 			switch($status){
 				
@@ -53,26 +58,21 @@
 				
 					$status =1;
 					
-					$data=[
-						'status'=>$status
+					$data=['status'=>$status];
 					
-					];
-					
-					$member_status =Db('member')->where('id',$id)->update($data);					
+					$member->updatemember($condition,$data);					
 					
 					$this->success("启用成功");
 				
 				break;				
 				
 				case 1:
+					
 					$status =0;
 					
-					$data=[
-						'status'=>$status
+					$data=['status'=>$status];
 					
-					];
-					
-					$member_status =Db('member')->where('id',$id)->update($data);		
+					$member->updatemember($condition,$data);
 				
 					$this->success("禁用成功");
 				
@@ -85,11 +85,11 @@
 		//删除会员
 		public function delmember($id){
 			
-			$table ='tp_member';
+			$member = new MemberModel();
 			
-			$delete =new Common();
+			$condition =['id'=>$id];
 			
-			$delete->deletes($table,'id','=',$id);
+			$member->delmember($condition);
 			
 			$this->Success('删除会员成功');
 			
@@ -99,43 +99,50 @@
 		public function delselmember($id){
 			
 			$a =$id;
+			
+			$member = new MemberModel();
 
 			for($i=0;$i<count($a);$i++){
 				
 				$id = $a[$i];
 				
-				$table ='tp_member';
-			
-				$delete =new Common();
+				$condition =['id'=>$id];
 				
-				$delete->deletes($table,'id','=',$id);
+				$member->delmember($condition);
 							
 			}
+			
 			$this->Success('删除会员成功');								
 		}
 		
 		//会员重置密码
 		public function memberepsd($id){
 			
-			$table ='tp_member';
+			$member = new MemberModel();
 			
 			$psd =md5(md5(123456));
 			
-			$updateused =new Common();
-				
-			$updateused->updates($table,'id',$id,'password',$psd);
+			$condition =['id'=>$id];
 			
-			return $this->success('会员重置密码为:123456');
+			$data =['password'=>$psd];
+			
+			$member->updatemember($condition,$data);			
+			
+			$this->success('会员重置密码为:123456');
 					
 		}
 		//新增会员
 		public function addmember($username,$password,$status,$phone){
+			
+			$members = new MemberModel();
+			
+			$condition =['username'=>$username];	
 				
-			$member = Db('member')->where('username',$username)->count();
+			$member = $members->membername($condition);
 			
 			if($member>0){
 			
-				return $this->error('用户名已存在');
+				$this->error('用户名已存在');
 				
 			}
 				
@@ -158,17 +165,20 @@
 				'status'=>$status
 			];
 			
-			$result=Db('member')->insert($data);
+			$members->insertmember($data);
 			
-			return $this->success('新增'.$username.'会员成功');			
+			$this->success('新增'.$username.'会员成功');			
 		
 		}
-		
 		
 		//查看用户名是否存在
 		public function namecheck($username){
 			
-			$user = Db('member')->where('username',$username)->count();
+			$member = new MemberModel();
+			
+			$condition =['username',$username];	
+
+			$user = $member->membername($condition);
 			
 			if($user>0){
 			
@@ -185,7 +195,11 @@
 		//会员编辑
 		public function edit($id){
 			
-			$member = Db('member')->where('id',$id)->select();
+			$member = new MemberModel();
+			
+			$condition =['id'=>$id];
+			
+			$member =$member->memberidinfo($condition);
 			
 			$this->assign('member',$member);
 			
@@ -213,7 +227,7 @@
 			switch($selects){
 				
 				case 'phone':
-				
+			
 					$count = Db('member')->where('phone','like','%'.$username.'%')->where('status',$mstatus)->count();   //统计总个数
 					
 					$countpage = ceil($count /$limits);  //总页数

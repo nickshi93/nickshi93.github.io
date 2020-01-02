@@ -3,31 +3,20 @@
 	
 	use think\Model;
 	
-	use think\Db;
-	
 	use think\Cookie;
 	
-	class UserModel extends Model{
+	class UserModel extends BaseModel{
+		
+		protected $table = 'admin';
 	
 		public function initialize(){
 			
-			parent::initialize(); //需要调用`Model`的`initialize`方法
-			//TODO:自定义的初始化
+			
 		}
-		
-		public function  index(){
-			
-			
-			
-		
-		}
-		
 		
 		public function  page(){
-						
-			$table ='tp_admin';
-			
-			$result =Db::table($table)->where('id','>',0)->paginate(10); //find（）查询所有
+	
+			$result =Db($this->table)->where('id','>',0)->paginate(10); //find（）查询所有
 				
 			return $result;		
 			
@@ -56,29 +45,52 @@
 	
 			];
 			
-			$result = Db::table('tp_admin')->insert($data);
+			$result = parent::insert($this->table,$data);
 			
-			return $result;		
 		}
-		//查询用户id信息
 		
-		public function selectuser($field,$id){
+		//指定ID用户信息
+		public function userinfo($condition){
+
+			$result = parent::select($this->table,$condition);
 			
-			$result = Db::table('tp_admin')->where($field,$id)->select();
+			return $result;
+						
+		}
+		//统计用户名数量
+		public function usercount($condition){
+			
+			//$result = Db($this->table)->where($condition)->count();
+			$result = parent::counts($this->table,$condition);
+			
+			return $result;
+		}
+		
+		//查询用户信息
+		public function edituserinfo($condition){
+
+			$result = parent::find($this->table,$condition);
 			
 			return $result;
 						
 		}
 		
 		
-		//更新用户信息
-		
-		public function updateuser($table,$field,$id,$field1,$role){
-			
-			$result=Db::table($table)->where($field, $id)->update([$field1 => $role]);
+		//更新用户信息		
+		public function updateuser($condition,$data){
 
-			return $result;
+			$result= parent::updates($this->table,$condition,$data);
+
+			return true;
 		}
 		
+		//删除用户
+		public function deluser($condition){
+	
+			$result = parent::del($this->table,$condition);
+			
+			return true;
+			
+		}
 		
 	}

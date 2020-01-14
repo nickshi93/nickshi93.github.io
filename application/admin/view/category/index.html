@@ -98,6 +98,7 @@
 		var layer = layui.layer,
 				form = layui.form,
 				tree =layui.tree;
+		//删除栏目
 		function del(nodeId) {
 			var id =nodeId;
 			layer.confirm('真的删除栏目？', function(index){
@@ -129,15 +130,26 @@
 				  });
 		  });
 		}
+		//编辑栏目
+		function edit(nodeId){
+				var id=nodeId;		
+				layer.open({
+				  type: 2,
+				  title: '编辑栏目',
+				  area: ['500px', '400px'],
+				  shadeClose: true, //点击遮罩关闭
+				  content: "/admin/category/edits.html?id="+id,//$('#useredit')//'\<\div style="padding:20px;">自定义内容\<\/div>'		
+				});	
+		
+		}
 
-		var layout = [
-			
+		var layout = [			
 			{name: 'Id',field: 'id',headerClass: 'value_col',colClass: 'value_col'},
 			{name: '菜单名称',treeNodes: true,headerClass: 'value_col',colClass: 'value_col'},
 			{name: '操作',headerClass: 'value_col',colClass: 'value_col',style: 'width: 30%',
 				render: function(row) {
 					return [
-						'<a class="layui-btn layui-btn-xs layui-btn-danger"  lay-event="del"   onclick="del(' + row.id + ')" title="删除"> <i class="layui-icon ">&#xe640;</i> </a><a class="layui-btn layui-btn-xs layui-btn-danger"  lay-event="edit"  href="{:url('category/edits')}?id=' + row.id + ')"   title="配置栏目"> <i class="layui-icon ">&#xe642;</i> </a>',
+						'<a class="layui-btn layui-btn-xs layui-btn-danger"  lay-event="del"   onclick="del(' + row.id + ')" title="删除"> <i class="layui-icon ">&#xe640;</i> </a><a class="layui-btn layui-btn-xs layui-btn-danger"  lay-event="edit" onclick="edit(' + row.id + ')"     title="配置栏目"> <i class="layui-icon ">&#xe642;</i> </a>',
 					].join('');
 				}
 			}

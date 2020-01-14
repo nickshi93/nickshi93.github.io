@@ -9,8 +9,6 @@
 	use think\Db;
 
 	use think\Cookie;
-	
-	use think\Request;
 
 	class Index extends Base{
 		
@@ -32,16 +30,12 @@
 	
 			$com ->index(); //调用常规数据	
 			
-			$request = Request::instance();
-			
-			$domain = $request->domain();//获取当前域名
+			$domain = $this->request->domain();//获取当前域名
 			
 			$this->assign('website',$domain);	//前台首页链接
 		
 			return $this->fetch();
-			
-			//return $this->fetch('/goods/index'); //引用goods文件下的index.html
-			
+	
 		}
 		
 		//商品页面

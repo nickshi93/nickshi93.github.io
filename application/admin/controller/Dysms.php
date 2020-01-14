@@ -7,10 +7,12 @@
 	use think\Db;
 	
 	class Dysms extends Base{
+		
+		private $table ='dysms';
 
 		public function index(){
 			
-			$dysms =Db::table('tp_dysms')->select();
+			$dysms =Db($this->table)->select();
 			
 			$this->assign('dysms',$dysms);
 			
@@ -23,14 +25,18 @@
 			$data =[
 				
 				'keyid'=>$keyid,
+				
 				'keysecret'=>$keysecret,
+				
 				'signame'=>$signame,
+				
 				'templatecode'=>$templatecode,
 			
 			];
-			$table='tp_dysms';
-					
-			Db::table($table)->where('id',1)->update($data);
+			
+			$condition =['id'=>1];
+				
+			Db($this->table)->where($condition)->update($data);
 			
 			return $this->success('更新成功');
 			

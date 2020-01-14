@@ -2,14 +2,13 @@
 	namespace app\admin\model;
 	
 	use think\Model;
-	
-	use think\Cookie;
-	
+
 	class UserModel extends BaseModel{
 		
 		protected $table = 'admin';
 	
 		public function initialize(){
+			
 			
 			
 		}
@@ -48,49 +47,38 @@
 			$result = parent::insert($this->table,$data);
 			
 		}
-		
-		//指定ID用户信息
-		public function userinfo($condition){
+		//用户列表
+		public function userlist($tol,$limit){
 
-			$result = parent::select($this->table,$condition);
+			$result =Db($this->table)->alias('a')->join('tp_role c','a.role=c.id')
+					->field('a.id,a.username,a.login_time,a.resign_time,a.used,a.role,c.name')
+					->limit($tol,$limit)
+					->order('id desc')
+					->select(); 	
 			
-			return $result;
-						
-		}
-		//统计用户名数量
-		public function usercount($condition){
+			return $result;	
 			
-			//$result = Db($this->table)->where($condition)->count();
-			$result = parent::counts($this->table,$condition);
-			
-			return $result;
 		}
 		
-		//查询用户信息
-		public function edituserinfo($condition){
-
-			$result = parent::find($this->table,$condition);
+		//模糊用户list
+		public function likesearch($tol,$limit,$username){
 			
-			return $result;
-						
+			$result =Db($this->table)->alias('a')->join('tp_role c','a.role=c.id')
+					->field('a.id,a.username,a.login_time,a.resign_time,a.used,a.role,c.name')
+					->where('username','like','%'.$username.'%')
+					->limit($tol,$limit)
+					->order('id desc')
+					->select(); 	
+			
+			return $result;	
 		}
-		
-		
-		//更新用户信息		
-		public function updateuser($condition,$data){
-
-			$result= parent::updates($this->table,$condition,$data);
-
-			return true;
-		}
-		
-		//删除用户
-		public function deluser($condition){
 	
-			$result = parent::del($this->table,$condition);
+		//用户模糊搜索总数
+		public function likeserachtol(){
 			
-			return true;
+			
 			
 		}
+		
 		
 	}

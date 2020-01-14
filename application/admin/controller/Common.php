@@ -24,13 +24,6 @@
 			
 			$this->assign('image',$img); //头像
 			
-			$menu = new Menu();
-			
-			$menus= $menu ->index();
-			
-			$this->assign('menu',$menus);
-			
-			
 		}
 		
 		//统计各表单个数

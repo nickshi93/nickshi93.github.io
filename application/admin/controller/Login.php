@@ -2,19 +2,25 @@
 
 	namespace app\admin\controller;
 	
-	use app\admin\model\UserModel;
-	
-	use think\Db;
-	
-	use think\Controller;
+	use app\admin\model\LoginModel;
 	
 	use think\Cookie;
 	
 	//use think\captcha;
 	
-	class Login extends Controller
+	class Login extends Base
 	{		
 
+		private $table ='admin';
+		
+		private function loginM(){
+			
+			$login =New LoginModel();
+			
+			return $login;
+			
+			
+		}
 		//登录页面
 		public function index(){
 						
@@ -31,21 +37,33 @@
 					$this->error('验证码错误');
 				};
 				
-				$passwd =md5(md5($passwd));
+				$passwd =$this->loginM()->hash_psd($passwd);
 				
-				$result =Db::table('tp_admin')->where('username',$account)->where('used','=','1')->where('password',$passwd)->find();			
-
+				$condition =[
+				
+					'username'=>$account,
+					
+					'used'=>1,
+					
+					'password'=>$passwd,
+				
+				];
+	
+				$result =$this->loginM()->find($this->table,$condition);
+				
 				$time =date('Y-m-d H:i:s',time());				
 				
 				if($result !== null){				
-						
-					$update =new Common();
 					
-					$update ->updates('tp_admin','username',$account,'login_time',$time); //调用常规类的更新方法
+					$data=['login_time'=>$time];
+					
+					$condition =['username'=>$account];
+					
+					$this->loginM()->updates($this->table,$condition,$data);
 					
 					Cookie::set('name',$account,36000);	 
 					
-				 	$this ->success('登录成功','index/index');		
+				 	$this ->success($this->loginM()->msg('00010'),'index/index');		
 				 
 					// return json("ajax成功！".$account."---".$passwd);	
 			   
@@ -59,15 +77,14 @@
 					
 		}
 		
-		//注销功能
-		
+		//注销功能	
 		public function loginout(){
 			
 				Cookie::delete('name');
 				
-				$this ->success('退出成功','index/index');	
+				$this ->success($this->loginM()->msg('00030'));	
 								
-				return		$this->redirect('login/index');
+				return $this->redirect('login/index');
 	
 		}
 	

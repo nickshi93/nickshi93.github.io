@@ -4,7 +4,7 @@
 	
 	use think\Controller;
 	
-	class Menu extends Base{
+	class Menu {
 				
 		public function index(){
 			

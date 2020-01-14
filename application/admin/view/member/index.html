@@ -230,10 +230,8 @@
 			  
 			  });
 			  
-			
-			//parent.layer.msg('删除中...', {icon: 16,shade: 0.3,time:1000});
-			//layer.alert(JSON.stringify(data));
-			$.ajax({
+			layer.confirm('确定删除会员？', function(index){
+				$.ajax({
 						  url:"{:url('member/delselmember')}",
 						  type:'post',
 						  data:{
@@ -257,6 +255,13 @@
 							  }
 						  },
 					});
+			
+			
+			});
+			//parent.layer.msg('删除中...', {icon: 16,shade: 0.3,time:1000});
+			//layer.alert(JSON.stringify(data));批量删除
+
+			
 		  
 		  
 		}
@@ -382,9 +387,7 @@
 	
 			}//重置用户密码	end
 	  });
-  
-	  
-	
+
  });
 
 </script>

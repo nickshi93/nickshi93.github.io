@@ -22,12 +22,6 @@
 			$title ="商品";
 			
 			$this->assign('title',$title);
-
-			$menu = new Menu();
-			
-			$menus= $menu ->index();
-						
-			$this->assign('menu',$menus);
 			
 			$com = new Common();
 			

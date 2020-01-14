@@ -2,16 +2,30 @@
 
 	namespace app\admin\controller;
 	
+	use app\admin\model\CategoryModel;
+	
 	use think\Controller;
 	
 	use think\Db;
 	
 	class Category extends Base{
 		
-		public function index()
-		{
+		private $table='category';
+		
+		private  function category(){  
 			
-			$category =Db::table('tp_category')->where('pid','0')->select();
+			$CategoryM =new CategoryModel();
+			
+			return $CategoryM;
+			
+		}
+		
+		public function index()
+		{		
+		
+			$condition =['pid'=>0];
+			
+			$category = $this->category()->select($this->table,$condition);
 			
 			$this->assign('category',$category);
 			
@@ -21,25 +35,28 @@
 		//栏目信息
 		public function categoryinfo(){
 			
-			$list["msg"]='';
-			
-			$list['code']=0;
-			
-			$id =0;
-			
-			$pid ='pid';
-			
-			$cate = $this ->categorytree($pid,$id); //查询pid=0的一级栏目
+			$list=[
+				
+				'msg'=>'',
+				
+				'code'=>0,
+			];
+		
+			$condition=['pid'=>0];
+
+			$cate = $this->categorytree($condition); //查询pid=0的一级栏目
 			
 			  foreach($cate as $k) {
 				
 				$id = $k['id'];
 				
-				$cates['id']=$id;
+				$cates['id']= $id;
 				
-				$cates['name']=$k['name'];
+				$cates['name']= $k['name'];
 				
-				$cates['children']=$this->categorytree($pid,$id); //根据一级栏目id查询二级栏目
+				$condition =['pid'=>$id];
+				
+				$cates['children']=$this->categorytree($condition); //根据一级栏目id查询二级栏目
 				
 				$data[]=$cates;
 			  } 
@@ -47,34 +64,28 @@
 			$list['data'] = $data;	
 		
 			return  json($list);
-		
-			
+
 		}
 		
-		//根据pid的值查询栏目
-		public function categorytree($pid,$params){
+		//栏目list
+		public function categorytree($condition)
+		{
 			
-			$cate =Db::table('tp_category')->where($pid,$params)->select();
+			$cate = $this->category()->select($this->table,$condition);
 			
 			return $cate;
+			
 		}
-		
+	
 		//删除栏目
 		public function delcategory($id){
 			
-			$table ='tp_category';
+			$condition =['id'=>$id];
 			
-			$field='id';
-			
-			$conditions='=';
-			
-			$result =new Common();
-			
-			$result->deletes($table,$field,$conditions,$id);
-			
-			$this->Success('删除成功');
-			
-			
+			$this->category()->del($this->table,$condition);
+		
+			$this->Success($this->category()->msg(20010));
+
 		}
 		//新增栏目
 		public function addcategory($name,$id,$ishow,$sortid,$template){
@@ -93,21 +104,18 @@
 			
 			];
 			
-			$table ='tp_category';
+			$this->category()->insert($this->table,$data);
 			
-			$result =new Common();
-			
-			$result ->add($data,$table);
-			
-			$this->Success('新增成功');
-			
-			
+			$this->Success($this->category()->msg(10010));
+				
 		}
 		
 		//编辑栏目
 		public function edits($id){
-		
-			$category=Db::table('tp_category')->where('id','=',$id)->select();
+			
+			$condition =['id'=>$id];
+	
+			$category = $this->category()->select($this->table,$condition);
 			
 			$this->assign('category',$category);
 			
@@ -117,7 +125,9 @@
 				
 			}
 			
-			$tops =Db::table('tp_category')->where('pid','0')->select();
+			$condition =['id'=>$id];
+			
+			$tops =$this->category()->select($this->table,$condition);
 			
 			$this->assign('tops',$tops);
 			
@@ -127,8 +137,6 @@
 		
 		//更新编辑栏目信息
 		public function updatecate($id,$pid,$name,$sortid,$ishow,$template){
-
-			$table ='tp_category';
 			
 			$data =[
 			
@@ -144,9 +152,11 @@
 
 			];
 			
-			$userole=Db::table($table)->where('id',$id)->update($data);
+			$condition=['id'=>$id];
 			
-			$this->success('编辑成功');
+			$this->category()->updates($this->table,$condition,$data);
+			
+			$this->Success($this->category()->msg(30010));
 				
 		}
 		

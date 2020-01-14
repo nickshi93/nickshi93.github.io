@@ -7,11 +7,19 @@
 	use think\Controller;  //引用think\Controller;是为了能够引用模板和变量赋值
 
 	use think\Db;
-
-	use think\Cookie;
 	
 	class User extends Base{
 		
+		private $table ='admin';
+		
+		private function user(){
+			
+			$user =New UserModel(); //实例化模型
+			
+			return $user;
+			
+		}
+			
 		public function index(){
 			
 			$title ="新增用户";
@@ -22,9 +30,9 @@
 			
 			$com = New Common();
 			
-			$user =New UserModel(); //实例化模型
+			$condition=['id'>0];
 			
-			$users = $user->page(); //获取用户数据
+			$users = $this->user()->page(); //获取用户数据
 		
 			$pages = $users->render();//用户数据分页
 			
@@ -33,8 +41,6 @@
 			$token =$this->request->token('_token_');//生成令牌
 			
 			$this->assign('role',$role);  
-			
-			$this->assign('pages',$pages);
 			
 			$this->assign('users',$users);
 						
@@ -51,8 +57,10 @@
 		    $pages = $page-1;
 			//计算出从那条开始查询
 		    $tol = $pages *	$limits;
+			
+			$condition=[];
 				   
-			$count = Db::table('tp_admin')->count();   //统计总个数
+			$count =$this->user()->counts($this->table,$condition);   //统计总个数
 			
 			$countpage = ceil($count /$limits);  //总页数
 			
@@ -63,13 +71,9 @@
 			$list['count']=$count;  //总条数
 
 			// 联合role表查询出当前user页数显示的数据
-			$data = Db::table('tp_admin')->alias('a')->join('tp_role c','a.role=c.id')
-					->field('a.id,a.username,a.login_time,a.resign_time,a.used,a.role,c.name')
-					->limit($tol,$limit)
-					->order('id desc')
-					->select(); 	
+			$data = $this->user()->userlist($tol,$limit);
 			
-			$list['data']=$data;
+			$list['data']= $data;
 			
 			return json($list);
 
@@ -84,12 +88,10 @@
 				
 				return false;
 			}
-			
-			$user =New UserModel();
 				
 			$condition =['id'=>$id];
 
-			$user->deluser($condition);
+			$this->user()->del($this->table,$condition);
 			
 			$this->Success('删除用户成功');
 
@@ -98,21 +100,11 @@
 		//新增用户
 		public function adduser($username,$password,$re_pwd,$used,$role){
 			
-			$user =New UserModel(); //实例化模型
-			
-			$condition=['username'=>$username];
-			
-			$users = $user->usercount($condition);
-			
-			if($users>0){
-			
-				return $this->error('用户名已存在');
+			$this->namecheck($username);
 				
-			}
-				
-			$password =md5(md5($password));
+			$password =$this->user()->hash_psd($password);
 
-			$user->adduser($username,$password,$used,$role);
+			$this->user()->adduser($username,$password,$used,$role);
 				
 			return $this->success('新增'.$username.'用户成功');
 				
@@ -121,15 +113,13 @@
 		//重置用户密码
 		public function resetpsd($id){
 		
-			$psd =md5(md5(123456));
-			
-			$user = New UserModel();
+			$psd =$this->user()->hash_psd(123456);
 			
 			$condition =['id'=>$id];
 			
 			$data =['password'=>$psd,];
 				
-			$user->updateuser($condition,$data);
+			$this->user()->updates($this->table,$condition,$data);
 			
 			return $this->success('重置密码为:123456');
 			
@@ -137,16 +127,14 @@
 		
 		//更新用户状态
 		public function updataused($id,$used){
-	
-			$user =New UserModel(); //实例化模型	
-
+			
 			$condition = ['id'=>$id];				
 			
 			if($used=='1'){
 					
 				$data =['used'=>'0'];
 								
-				$user->updateuser($condition,$data); 
+				$this->user()->updates($this->table,$condition,$data); 
 									
 				$this->Success('禁用用户成功');
 				
@@ -154,7 +142,7 @@
 					
 				$data =['used'=>'1'];
 
-				$user->updateuser($condition,$data); 
+				$this->user()->updates($this->table,$condition,$data); 
 		
 				$this->Success('启用用户成功');
 			}
@@ -176,12 +164,10 @@
 					
 					return;
 				}
-			
-				$user =New UserModel();
-				
+
 				$condition =['id'=>$id];
 
-				$user->deluser($condition);
+				$this->user()->del($this->table,$condition);
 							
 			}
 			$this->Success('删除用户成功');								
@@ -190,17 +176,15 @@
 		//编辑用户
 		public function useredit($id){
 			
-			$user =New UserModel(); //实例化模型
-			
 			$condition =['id'=>$id];
 			
-			$users = $user->userinfo($condition);  //查询用户信息
+			$users = $this->user()->select($this->table,$condition);  //查询用户信息
 			
-			$table ='tp_role';
+			$table ='role';
+			
+			$condition=[];
 				
-			$com = New Common();
-			
-			$role = $com ->selectable($table);
+			$role = $this->user()->select($table,$condition);
 			
 			$this->assign('role',$role);  //角色列表
 			
@@ -212,13 +196,11 @@
 		//更新编辑后的用户权限
 		public function updateuser($id,$role){
 		
-			$user =New UserModel(); //实例化模型	
-			
 			$condition =['id'=>$id];
 			
 			$data =['role'=>$role];
 			
-			$user->updateuser($condition,$data); 
+			$this->user()->updates($this->table,$condition,$data); 
 			
 			$this->success('用户编辑成功');
 								
@@ -227,14 +209,12 @@
 		//修改个人资料		
 		public function changedetail(){
 			
-			$name =cookie::get('name'); //用户名
-			
-			$user =New UserModel();
+			$name = $this->admin(); //用户名
 			
 			$data =['username'=>$name];
 			
-			$users = $user->edituserinfo($data);
-			
+			$users = $this->user()->find($this->table,$data);
+		
 			$img = $users['img'];
 			
 			$this->assign('image',$img);
@@ -248,15 +228,13 @@
 		//更新修改后的个人密码
 		public function userupdate($username,$password){
 			
-			$psd =md5(md5($password));
-			
-			$user =New UserModel(); //实例化模型	
-			
+			$psd = $this->user()->hash_psd($password);
+		
 			$condition =['username'=>$username];
 			
 			$data =['password'=>$psd];
 			
-			$user->updateuser($condition,$data); 
+			$this->user()->updates($this->table,$condition,$data); 
 			
 			$this->success('用户'.$username.'编辑成功');
 											
@@ -265,15 +243,15 @@
 		//查看用户名是否存在
 		public function namecheck($username){
 			
-			$user = Db::table('tp_admin')->where('username',$username)->count();
+			$condition =['username'=>$username];
+			
+			$user = $this->user()->counts($this->table,$condition);
 			
 			if($user>0){
 			
 				return $this->success('用户名已存在');
 				
-			}else{
-				
-				return $this->success('用户名可以使用');
+				die;
 				
 			}
 		
@@ -289,7 +267,7 @@
 			//计算出从那条开始查询
 		    $tol = $pages *	$limits;
 				   
-			$count = Db::table('tp_admin')->where('username','like','%'.$username.'%')->count();   //统计总个数
+			$count = Db('admin')->where('username','like','%'.$username.'%')->count();   //统计总个数
 			
 			$countpage = ceil($count /$limits);  //总页数
 			
@@ -300,15 +278,7 @@
 			$list['count']=$count;  //总条数
 
 			// 联合role表查询出当前user页数显示的数据
-			$data = Db::table('tp_admin')->alias('a')->join('tp_role c','a.role=c.id')
-					
-					->field('a.id,a.username,a.login_time,a.resign_time,a.used,a.role,c.name')
-					
-					->where('a.username','like','%'.$username.'%')
-					
-					->order('id desc')
-					
-					->select(); 	
+			$data = $this->user()->likesearch($tol,$limit,$username);
 			
 			$list['data']=$data;
 			
@@ -342,9 +312,11 @@
 					
 					];
 					
-					$name =cookie::get('name'); //用户名
+					$username = $this->admin(); //用户名
 					
-					$result =Db::table('tp_admin')->where('username',$name)->update($data);
+					$condition =['username'=>$username];
+					
+					$this->user()->updates($this->table,$condition,$data); 
 					
 					$this->success('头像更改成功');
 

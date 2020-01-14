@@ -3,11 +3,21 @@
 	
 	use think\Controller;
 	
-	use think\Db;
+	use app\admin\model\Article as ArticleModel;
 		
 	use think\Cookie;
 	
 	class Article extends Base{
+		
+		private $table='article';
+		
+		private function article(){
+			
+			$article = New ArticleModel();
+			
+			return $article;
+
+		}
 		
 		public function index(){
 			
@@ -23,29 +33,28 @@
 		   //获取当前页数
 		    $pages = $page-1;
 			//计算出从那条开始查询
-		    $tol = $pages *	$limits;	   
+		    $tol = $pages *	$limits;
 			
-			$count = Db::table('tp_article')->count();   //统计总个数
+			$condition=[];
+			
+			$count = $this->article()->counts($this->table,$condition);  //统计总个数
 			
 			$countpage = ceil($count /$limits);  //总页数
 			
-			$list["msg"]='';
+			$list =[
 			
-			$list['code']=0;
+				'msg'=>'',
+				
+				'code'=>0,
+				
+				'count'=>$count,//总条数
 			
-			$list['count']=$count;  //总条数
-
-			// 联合role表查询出当前user页数显示的数据
-			$data = Db::table('tp_article')
-					->limit($tol,$limit)
-					->order('id desc')
-					->select(); 	
+			];
+			$data = $this->article()->articlemenu($tol,$limits);
 			
 			$list['data']=$data;
 			
-			return json($list);
-			
-			
+			return json($list);	
 			
 		}
 		
@@ -53,38 +62,13 @@
 		//主页更新字段内容
 		public function update($id,$value,$field){
 			
-			switch ($field){
-				
-				case 'title' :
-					
-					$data=[
-						
-						'title'=>$value
-						
-					];
-					
-					$result =Db('article')->where('id',$id)->update($data);
-					
-					echo "更改标题成功";
-				
-				break;
-				
-				case 'pv':
-					
-					$data=[
-							
-						'pv'=>$value
-							
-					];
-						
-					$result =Db('article')->where('id',$id)->update($data);
-					
-					echo "更改浏览量成功";
-				
-				break;
-				
-			}		
+			$condition=['id'=>$id];
 			
+			$data=[$field=>$value];
+			
+			$this->article()->updates($this->table,$condition,$data); 
+			
+			echo $this->article()->msg(50010);
 		}
 		
 		
@@ -101,15 +85,13 @@
 				
 			}
 			
-			$data =[
+			$data =['ishow'=>$ishow];
 			
-				'ishow'=>$ishow
+			$condition =['id'=>$id];
 			
-			];
+			$this->article()->updates($this->table,$condition,$data); 
 			
-			$result =Db('article')->where('id',$id)->update($data);
-			
-			$this->success('状态已更改');
+			$this->success($this->article()->msg(50010));
 		}
 		
 		//更新主页文章置顶
@@ -125,15 +107,13 @@
 				
 			}
 			
-			$data =[
+			$data =['top'=>$top];
 			
-				'top'=>$top
+			$condition =['id'=>$id];
 			
-			];
+			$this->article()->updates($this->table,$condition,$data); 
 			
-			$result =Db('article')->where('id',$id)->update($data);
-			
-			$this->success('状态已更改');
+			$this->success($this->article()->msg(50010));
 			
 		}
 		
@@ -147,15 +127,13 @@
 				
 				$id = $a[$i];
 				
-				$table ='tp_article';
-			
-				$article = new Common();
+				$condition = ['id'=>$id];
 				
-				$article->deletes($table,'id','=',$id);
+				$this->article()->del($this->table,$condition,$data); 
 							
 			}
 			
-			$this->Success('删除文章成功');			
+			$this->Success($this->article()->msg(20010));			
 			
 		}
 		
@@ -168,8 +146,8 @@
 		    $pages = $page-1;
 			//计算出从那条开始查询
 		    $tol = $pages *	$limits;	   
-			
-			$count = Db::table('tp_article')->count();   //统计总个数
+		
+			$count = $this->article()->countitle($title);   //统计总个数
 			
 			$countpage = ceil($count /$limits);  //总页数
 			
@@ -177,15 +155,12 @@
 			
 			$list['code']=0;
 			
-			$list['count']=$count;  //总条数
+			$list['count']= $count;  //总条数
 
 			// 联合role表查询出当前user页数显示的数据
-			$data = Db::table('tp_article')
-					->limit($tol,$limit)
-					->where('title','like','%'.$title.'%')
-					->order('id desc')
-					->select(); 	
 			
+			$data = $this->article()->searhtitle($title,$tol,$limits);
+	
 			$list['data']=$data;
 			
 			return json($list);
@@ -216,7 +191,9 @@
 				$data[]=$category;
 			  } 
 
-			$article =Db('article')->where('id',$aid)->select();
+			$condition=['id'=>$aid];
+			
+			$article =$this->article()->select($this->table,$condition);
 				
 			$this->assign('data',$data);
 			
@@ -232,7 +209,8 @@
 			
 			if($img!==null){
 				
-				$artimg =$img;
+				$artimg = $img;
+				
 			}else{
 				
 				$img =$artimg;
@@ -266,11 +244,13 @@
 				'descript'=>$descript
 			];
 			
-			$res =Db('article')->where('id',$id)->update($data);
+			$condition=['id'=>$id];
+			
+			$this->article()->updates($this->table,$condition,$data);
 			
 			Cookie::delete('img');
 			
-			$this->success('文章编辑成功');
+			$this->success($this->article()->msg(50010));
 			
 			
 		}

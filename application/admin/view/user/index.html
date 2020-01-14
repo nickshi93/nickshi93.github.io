@@ -198,6 +198,7 @@
 		});
 		
 		//批量删除用户
+
 		var $ = layui.$, active = {
 		getCheckData: function(){ //获取选中数据
 		  var checkStatus = table.checkStatus('tryReload')
@@ -215,7 +216,7 @@
 				delist.push(n.id);
 			  
 			  });		  
-			
+			layer.confirm('确定删除用户？', function(index){
 			//parent.layer.msg('删除中...', {icon: 16,shade: 0.3,time:1000});
 			//layer.alert(JSON.stringify(data));
 			$.ajax({
@@ -241,7 +242,8 @@
 								  });
 							  }
 						  },
-					});	  
+					});	
+			});
 		}
 		,getCheckLength: function(){ //获取选中数目
 		  var checkStatus = table.checkStatus('tryReload')

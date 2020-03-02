@@ -1,9 +1,7 @@
 <?php 
 	namespace app\admin\controller;
-	
-	use think\Controller;
-	
-	use app\admin\model\UserModel;
+
+	use app\admin\model\Banner as BannerModel;
 	
 	use think\Db;
 	
@@ -15,7 +13,6 @@
 					
 		}
 		
-		
 		public function bannerinfo($limit,$page){
 		
 			//获取每页显示的条数
@@ -24,8 +21,10 @@
 		    $pages = $page-1;
 			//计算出从那条开始查询
 		    $tol = $pages *	$limits;
-				  
-			$count = Db::table('tp_banner')->count();   //统计总个数
+			
+			$banner = new BannerModel();
+			
+			$count =$banner->bannercount();   //统计总个数
 			
 			$countpage = ceil($count /$limits);  //总页数
 			
@@ -36,7 +35,7 @@
 			$list['count']=$count;  //总条数
 
 			// 查询出当前页数显示的数据
-			$data = Db::table('tp_banner')->limit($tol,$limit)->select(); 
+			$data = $banner->select($tol,$limit);
 	
 			$list['data']= $data;
 			
@@ -46,39 +45,27 @@
 		//更改轮播图类型
 		public function imgtype($id,$used){
 			
-				$field = 'id';
+			$banner =New BannerModel(); //实例化模型		
 				
-				$field1 ='imgtype';
-			
-				$table ='tp_banner';	
-
-				$user =New UserModel(); //实例化模型					
-			
-				if($used=='1'){
+			$condition =['id'=>$id];
 				
-					$used='0';
+			$useds =$used=='1'?'0':'1';
+				
+			$data =['imgtype'=>$useds];
 								
-					$user->updateuser($table,$field,$id,$field1,$used); 
+			$banner->updateb($condition,$data); 
 									
-					$this->Success('成功改为PC端');
-				
-				}else{
-					
-					$used='1';
-				
-					$user->updateuser($table,$field,$id,$field1,$used); 
-			
-					$this->Success('成功改为手机端');
-				}			
+			$this->Success('更改成功');
+						
 		}
 		//删除数据库中的轮播图数据
 		public function delbanner($id){
-					
-			$table ='tp_banner';
+
+			$banner =New BannerModel(); //实例化模型	
+
+			$condition =['id'=>$id];
 			
-			$delete =new Common();
-			
-			$delete->deletes($table,'id','=',$id);
+			$banner->deletes($condition);
 			
 			$this->Success('删除图片成功');
 			
@@ -87,16 +74,14 @@
 		//更新轮播图排序
 		
 		public function updatesort($id,$value,$field){
-					
-			$field = 'id';
 				
-			$field1 ='sortid';
+			$condition=['id'=>$id];
 			
-			$table ='tp_banner';	
+			$data=['sortid'=>$value];
 
-			$user =New UserModel(); //实例化模型					
+			$banner =New BannerModel(); //实例化模型						
 								
-			$user->updateuser($table,$field,$id,$field1,$value); 	
+			$banner->updateuser($condition); 	
 
 			$data ='编辑成功';
 			

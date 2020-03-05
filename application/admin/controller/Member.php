@@ -2,31 +2,28 @@
 	
 	namespace app\admin\controller;
 	
-	use think\Controller;
-	
-	use app\admin\model\MemberModel;
-	
-	use think\Db;
-	
+	use app\admin\model\Member as MemberModel;
+
 	class member extends Base{
-		
-		private $table ='member';
-		
-		public function index(){
+	
+		public function index()
+		{
 
 			return $this->fetch('member/index');
 			
 		}
 		
-		private function memberm(){
+		private function member()
+		{
 			
-			$memberm = new MemberModel();
+			$member = new MemberModel();
 			
-			return $memberm;
+			return $member;
 		}
 		
 		//会员信息
-		public function memberinfo($limit,$page){
+		public function memberinfo($limit,$page)
+		{
 	
 			//获取每页显示的条数
 		    $limits = $limit;
@@ -37,17 +34,21 @@
 			
 			$condition =[];
 			
-			$count = $this->memberm()->counts($this->table,$condition);   //统计总个数
+			$count = $this->member()->counts($condition);   //统计总个数
 		
 			$countpage = ceil($count /$limits);  //总页数
 			
-			$list["msg"]='';
+			$list =[
+				
+				'msg'=>'',
+				
+				'code'=>'',
+				
+				'count'=>$count, //总条数
+					
+			];
 			
-			$list['code']=0;
-			
-			$list['count']=$count;  //总条数
-			
-			$data = $this->memberm()->select($this->table,$condition); 	
+			$data = $this->member()->getAll($condition); 	
 			
 			$list['data']=$data;
 			
@@ -56,53 +57,36 @@
 		}
 		
 		//更新会员状态启用/禁用
-		public function updatestatus($id,$status){
+		public function updatestatus($id,$status)
+		{
 			
 			$condition =['id'=>$id];
-				
-			switch($status){
-				
-				case 0:
-				
-					$status =1;
-					
-					$data=['status'=>$status];
-					
-					$this->memberm()->updates($this->table,$condition,$data);					
-					
-					$this->success($this->memberm()->msg(40010));
-				
-				break;				
-				
-				case 1:
-					
-					$status =0;
-					
-					$data=['status'=>$status];
-					
-					$this->memberm()->updates($this->table,$condition,$data);
-				
-					$this->success($this->memberm()->msg(40020));
-				
-				break;	
-				
-			}		
 			
+			$status = $status =='1'?'0':'1';
+					
+			$data=['status'=>$status];
+					
+			$this->member()->updates($condition,$data);					
+					
+			$this->success($this->member()->msg(50010));
+				
 		}
 		
 		//删除会员
-		public function delmember($id){
+		public function delmember($id)
+		{
 			
 			$condition =['id'=>$id];
 			
-			$this->memberm()->del($this->table,$condition);
+			$this->member()->del($condition);
 			
-			$this->Success($this->memberm()->msg(20010));
+			$this->Success($this->member()->msg(20010));
 			
 		}
 		
 		//批量删除会员
-		public function delselmember($id){
+		public function delselmember($id)
+		{
 			
 			$a =$id;
 			
@@ -112,33 +96,35 @@
 				
 				$condition =['id'=>$id];
 				
-				$this->memberm()->del($this->table,$condition);
+				$this->member()->del($condition);
 							
 			}
 			
-			$this->Success($this->memberm()->msg(20010));								
+			$this->Success($this->member()->msg(20010));								
 		}
 		
 		//会员重置密码
-		public function memberepsd($id){
+		public function memberepsd($id)
+		{
 				
-			$psd =$this->memberm()->hash_psd(123456);
+			$psd =$this->member()->hash_psd(123456);
 			
 			$condition =['id'=>$id];
 			
 			$data =['password'=>$psd];
 			
-			$this->memberm()->updates($this->table,$condition,$data);			
+			$this->member()->updates($condition,$data);			
 			
 			$this->success('会员重置密码为:123456');
 					
 		}
 		//新增会员
-		public function addmember($username,$password,$status,$phone){
+		public function addmember($username,$password,$status,$phone)
+		{
 				
 			$this->namecheck($username);
 				
-			$password = $this->memberm()->hash_psd($password);
+			$password = $this->member()->hash_psd($password);
 			
 			$time = date('Y-m-d H:i:s',time());
 			
@@ -157,18 +143,19 @@
 				'status'=>$status
 			];
 			
-			$this->memberm()->insert($this->table,$data);
+			$this->member()->add($data);
 			
-			$this->success($this->memberm()->msg(10010));			
+			$this->success($this->member()->msg(10010));			
 		
 		}
 		
 		//查看用户名是否存在
-		public function namecheck($username){
+		public function namecheck($username)
+		{
 				
 			$condition =['username'=>$username];	
 
-			$user = $this->memberm()->counts($this->table,$condition);
+			$user = $this->member()->counts($condition);
 			
 			if($user>0){
 			
@@ -181,11 +168,12 @@
 		}
 		
 		//会员编辑
-		public function edit($id){
+		public function edit($id)
+		{
 			
 			$condition =['id'=>$id];
 			
-			$member =$this->memberm()->select($this->table,$condition);
+			$member =$this->member()->getAll($condition);
 			
 			$this->assign('member',$member);
 			
@@ -194,14 +182,16 @@
 		}
 		
 		//更改会员信息
-		public function updatemember($username,$id){
+		public function updatemember($username,$id)
+		{
 			
 			
 			
 		}
 		
 		//会员搜索
-		public function membersearch($limit,$page,$username,$selects,$mstatus){
+		public function membersearch($limit,$page,$username,$selects,$mstatus)
+		{
 			
 			//获取每页显示的条数
 		    $limits = $limit;
@@ -209,66 +199,27 @@
 		    $pages = $page-1;
 			//计算出从那条开始查询
 		    $tol = $pages *	$limits;
+						
+			$condition =['status'=>$mstatus];
+	
+			$count = $this->member()->searchcount($selects,$username,$condition);   //统计总个数
+					
+			$countpage = ceil($count /$limits);  //总页数
+				
+			$list =[
+				
+				'msg'=>'',
+				
+				'code'=>'',
+				
+				'count'=>$count, //总条数
+					
+			];
 			
-			switch($selects){
-				
-				case 'phone':
-			
-					$count = Db($this->table)->where('phone','like','%'.$username.'%')->where('status',$mstatus)->count();   //统计总个数
+			$list['data']=$this->member()->search($selects,$username,$condition);
 					
-					$countpage = ceil($count /$limits);  //总页数
-				
-					$list["msg"]='';
+			return json($list);
 					
-					$list['code']=0;
-					
-					$list['count']=$count;  //总条数
-
-					$data = Db($this->table)		
-							
-							->where('phone','like','%'.$username.'%')
-							
-							->where('status',$mstatus)
-							
-							->order('id desc')
-							
-							->select(); 	
-					
-					$list['data']=$data;
-					
-					return json($list);
-				
-				break;
-				
-				case 'username':
-				
-					$count = Db($this->table)->where('username','like','%'.$username.'%')->where('status',$mstatus)->count();   //统计总个数
-					
-					$countpage = ceil($count /$limits);  //总页数
-				
-					$list["msg"]='';
-					
-					$list['code']=0;
-					
-					$list['count']=$count;  //总条数
-
-					$data = Db($this->table)		
-							
-							->where('username','like','%'.$username.'%')
-							
-							->where('status',$mstatus)
-							
-							->order('id desc')
-							
-							->select(); 	
-					
-					$list['data']=$data;
-					
-					return json($list);
-				
-				break;				
-				
-			}
 		
 		}
 	}

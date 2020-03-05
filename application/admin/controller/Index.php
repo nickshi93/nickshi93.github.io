@@ -2,12 +2,6 @@
 	
 	namespace app\admin\controller;
 
-	use app\admin\model;
-
-	use think\Controller;  //引用think\Controller;是为了能够引用模板和变量赋值
-
-	use think\Db;
-
 	use think\Cookie;
 
 	class Index extends Base{
@@ -21,15 +15,11 @@
 			$title ="后台首页";
 			
 			$this->assign('title',$title);
-						
-			$com = new Common();
-			
-			$role = $com ->userole(); 	
-			
+		
+			$role = $this ->userole(); 	
+		
 			$this->assign('role',$role);	//调用用户列表
-	
-			$com ->index(); //调用常规数据	
-			
+
 			$domain = $this->request->domain();//获取当前域名
 			
 			$this->assign('website',$domain);	//前台首页链接

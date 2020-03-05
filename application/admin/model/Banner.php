@@ -7,7 +7,7 @@
 	class Banner extends BaseModel
 	{
 		
-		public function bannercount()
+		public function bcount()
 		{
 			
 			return $this->count();
@@ -21,14 +21,14 @@
 			return $this->limit($tol,$limit)->select();
 		}
 		
-		public function updateb($condition,$data)
+		public function updates($condition,$data)
 		{
 			
 			return $this->where($condition)->update($data);
 			
 		}
 		
-		public function deletes($condition)
+		public function del($condition)
 		{
 			return $this->where($condition)->delete();
 			

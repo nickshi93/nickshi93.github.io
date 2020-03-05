@@ -11,9 +11,10 @@
 	class Login extends Base
 	{		
 
-		private $table ='admin';
+		private $table ='user';
 		
-		private function loginM(){
+		private function loginM()
+		{
 			
 			$login =New LoginModel();
 			
@@ -22,14 +23,16 @@
 			
 		}
 		//登录页面
-		public function index(){
+		public function index()
+		{
 						
 			return	$this->fetch();	
 			
 		}
 		
 		//登录功能
-		public function login($account,$passwd,$captcha){								
+		public function login($account,$passwd,$captcha)
+		{								
 				
 				// 处理验证码
 				if(!captcha_check($captcha)){
@@ -78,7 +81,8 @@
 		}
 		
 		//注销功能	
-		public function loginout(){
+		public function loginout()
+		{
 			
 				Cookie::delete('name');
 				

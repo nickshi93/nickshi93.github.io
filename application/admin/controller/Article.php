@@ -1,17 +1,14 @@
 <?php 
 	namespace app\admin\controller;
 	
-	use think\Controller;
-	
 	use app\admin\model\Article as ArticleModel;
 		
 	use think\Cookie;
 	
 	class Article extends Base{
 		
-		private $table='article';
-		
-		private function article(){
+		private function article()
+		{
 			
 			$article = New ArticleModel();
 			
@@ -19,14 +16,16 @@
 
 		}
 		
-		public function index(){
+		public function index()
+		{
 			
 			return $this->fetch('article/index');
 			
 		}
 		
 		//文章目录
-		public function articleinfo($limit,$page){
+		public function articleinfo($limit,$page)
+		{
 			
 			//获取每页显示的条数
 		    $limits = $limit;
@@ -37,7 +36,7 @@
 			
 			$condition=[];
 			
-			$count = $this->article()->counts($this->table,$condition);  //统计总个数
+			$count = $this->article()->counts($condition);  //统计总个数
 			
 			$countpage = ceil($count /$limits);  //总页数
 			
@@ -50,9 +49,8 @@
 				'count'=>$count,//总条数
 			
 			];
-			$data = $this->article()->articlemenu($tol,$limits);
 			
-			$list['data']=$data;
+			$list['data']= $this->article()->articlemenu($tol,$limits);
 			
 			return json($list);	
 			
@@ -60,42 +58,37 @@
 		
 		
 		//主页更新字段内容
-		public function update($id,$value,$field){
+		public function update($id,$value,$field)
+		{
 			
 			$condition=['id'=>$id];
 			
 			$data=[$field=>$value];
 			
-			$this->article()->updates($this->table,$condition,$data); 
+			$this->article()->updates($condition,$data); 
 			
 			echo $this->article()->msg(50010);
 		}
 		
 		
 		//更新主页文章是否显示
-		public function updateishow($id,$ishow){
+		public function updateishow($id,$ishow)
+		{
 			
-			if($ishow=='1'){
-				
-				$ishow ='0';
-				
-			}else{
-				
-				$ishow='1';
-				
-			}
-			
+			$ishow = $ishow=='1'?'0':'1';
+		
 			$data =['ishow'=>$ishow];
 			
 			$condition =['id'=>$id];
 			
-			$this->article()->updates($this->table,$condition,$data); 
+			$this->article()->updates($condition,$data); 
 			
 			$this->success($this->article()->msg(50010));
 		}
 		
 		//更新主页文章置顶
-		public function updatetop($id,$top){
+		public function updatetop($id,$top)
+		{
 			
 			if($top=='1'){
 				
@@ -111,7 +104,7 @@
 			
 			$condition =['id'=>$id];
 			
-			$this->article()->updates($this->table,$condition,$data); 
+			$this->article()->updates($condition,$data); 
 			
 			$this->success($this->article()->msg(50010));
 			
@@ -119,7 +112,8 @@
 		
 		
 		//批量删除文章
-		public function delselarticle($id){
+		public function delselarticle($id)
+		{
 			
 			$a =$id;
 
@@ -129,7 +123,7 @@
 				
 				$condition = ['id'=>$id];
 				
-				$this->article()->del($this->table,$condition,$data); 
+				$this->article()->del($condition,$data); 
 							
 			}
 			
@@ -138,7 +132,8 @@
 		}
 		
 		//按标题搜索文章
-		public function titlesearch($limit,$page,$title){
+		public function titlesearch($limit,$page,$title)
+		{
 			
 			//获取每页显示的条数
 		    $limits = $limit;
@@ -159,24 +154,21 @@
 
 			// 联合role表查询出当前user页数显示的数据
 			
-			$data = $this->article()->searhtitle($title,$tol,$limits);
+			$list['data']= $this->article()->searhtitle($title,$tol,$limits);
 	
-			$list['data']=$data;
-			
 			return json($list);
 
 		}
 		
 		//文章编辑页面
-		public function edit($aid){
-			
-			$cate =New Addarticle();
-			
+		public function edit($aid)
+		{
+	
 			$id =0;
 			
 			$pid ='pid';
 			
-			$categorys =$cate->artree($pid,$id); //查询文章pid=0的一级栏目
+			$categorys =$this->article()->artree($pid,$id); //查询文章pid=0的一级栏目
 			
 			 foreach($categorys as $k) {
 				
@@ -193,7 +185,7 @@
 
 			$condition=['id'=>$aid];
 			
-			$article =$this->article()->select($this->table,$condition);
+			$article =$this->article()->getAll($condition);
 				
 			$this->assign('data',$data);
 			
@@ -203,7 +195,8 @@
 			
 		}
 		//更新文章内容
-		public function updatearticle($id,$title,$category,$author,$newsdate,$pv,$artimg,$artcontent,$ishow,$top,$descript){
+		public function updatearticle($id,$title,$category,$author,$newsdate,$pv,$artimg,$artcontent,$ishow,$top,$descript)
+		{
 			
 			$img = Cookie::get('img');
 			
@@ -246,12 +239,11 @@
 			
 			$condition=['id'=>$id];
 			
-			$this->article()->updates($this->table,$condition,$data);
+			$this->article()->updates($condition,$data);
 			
 			Cookie::delete('img');
 			
 			$this->success($this->article()->msg(50010));
-			
-			
+						
 		}
 	}

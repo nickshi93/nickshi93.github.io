@@ -2,17 +2,18 @@
 
 	namespace app\admin\controller;
 	
-	use app\admin\model\UserModel;
-
-	use think\Controller;  //引用think\Controller;是为了能够引用模板和变量赋值
+	use app\admin\model\User as UserModel;
 
 	use think\Db;
 	
 	class User extends Base{
+			
+		private $table='user';	
 		
-		private $table ='admin';
+		private $title='新增用户';
 		
-		private function user(){
+		private function user()
+		{
 			
 			$user =New UserModel(); //实例化模型
 			
@@ -20,23 +21,18 @@
 			
 		}
 			
-		public function index(){
-			
-			$title ="新增用户";
-			
-			$table ='tp_role';
-			
-			$this->assign('title',$title);
-			
-			$com = New Common();
-			
+		public function index()
+		{
+					
+			$this->assign('title',$this->title);
+
 			$condition=['id'>0];
 			
 			$users = $this->user()->page(); //获取用户数据
 		
 			$pages = $users->render();//用户数据分页
 			
-			$role = $com ->selectable($table);
+			$role = $this->user()->role();
 			
 			$token =$this->request->token('_token_');//生成令牌
 			
@@ -49,7 +45,8 @@
 		}
 		
 		//查看用户表信息
-		public function userinfo($limit,$page){
+		public function userinfo($limit,$page)
+		{
 			
 			//获取每页显示的条数
 		    $limits = $limit;
@@ -60,7 +57,7 @@
 			
 			$condition=[];
 				   
-			$count =$this->user()->counts($this->table,$condition);   //统计总个数
+			$count =$this->user()->counts($condition);   //统计总个数
 			
 			$countpage = ceil($count /$limits);  //总页数
 			
@@ -80,7 +77,8 @@
 		}
 				
 		//删除用户
-		public function deluser($id){
+		public function deluser($id)
+		{
 			
 			if($id=='1'){
 				
@@ -91,14 +89,15 @@
 				
 			$condition =['id'=>$id];
 
-			$this->user()->del($this->table,$condition);
+			$this->user()->del($condition);
 			
 			$this->Success('删除用户成功');
 
 		}
 		
 		//新增用户
-		public function adduser($username,$password,$re_pwd,$used,$role){
+		public function adduser($username,$password,$re_pwd,$used,$role)
+		{
 			
 			$this->namecheck($username);
 				
@@ -111,7 +110,8 @@
 		}
 		
 		//重置用户密码
-		public function resetpsd($id){
+		public function resetpsd($id)
+		{
 		
 			$psd =$this->user()->hash_psd(123456);
 			
@@ -119,38 +119,31 @@
 			
 			$data =['password'=>$psd,];
 				
-			$this->user()->updates($this->table,$condition,$data);
+			$this->user()->updates($condition,$data);
 			
 			return $this->success('重置密码为:123456');
 			
 		}
 		
 		//更新用户状态
-		public function updataused($id,$used){
+		public function updataused($id,$used)
+		{
 			
-			$condition = ['id'=>$id];				
-			
-			if($used=='1'){
-					
-				$data =['used'=>'0'];
-								
-				$this->user()->updates($this->table,$condition,$data); 
-									
-				$this->Success('禁用用户成功');
-				
-			}else{
-					
-				$data =['used'=>'1'];
+			$condition = ['id'=>$id];	
 
-				$this->user()->updates($this->table,$condition,$data); 
-		
-				$this->Success('启用用户成功');
-			}
+			$used= $used=='1'?'0':'1';
 			
+			$data =['used'=>$used];
+								
+			$this->user()->updates($condition,$data); 
+									
+			$this->Success('更改状态成功');
+
 		}
 		
 		//批量删除用户
-		public function delseluser($id){
+		public function delseluser($id)
+		{
 			
 			$a =$id;
 
@@ -167,24 +160,21 @@
 
 				$condition =['id'=>$id];
 
-				$this->user()->del($this->table,$condition);
+				$this->user()->delu($condition);
 							
 			}
 			$this->Success('删除用户成功');								
 		}
 		
 		//编辑用户
-		public function useredit($id){
+		public function useredit($id)
+		{
 			
 			$condition =['id'=>$id];
 			
-			$users = $this->user()->select($this->table,$condition);  //查询用户信息
+			$users = $this->user()->getAll($condition);  //查询用户信息
 			
-			$table ='role';
-			
-			$condition=[];
-				
-			$role = $this->user()->select($table,$condition);
+			$role = $this->user()->role();
 			
 			$this->assign('role',$role);  //角色列表
 			
@@ -194,20 +184,22 @@
 		}
 		
 		//更新编辑后的用户权限
-		public function updateuser($id,$role){
+		public function updateuser($id,$role)
+		{
 		
 			$condition =['id'=>$id];
 			
 			$data =['role'=>$role];
 			
-			$this->user()->updates($this->table,$condition,$data); 
+			$this->user()->updates($condition,$data); 
 			
 			$this->success('用户编辑成功');
 								
 		}
 		
 		//修改个人资料		
-		public function changedetail(){
+		public function changedetail()
+		{
 			
 			$name = $this->admin(); //用户名
 			
@@ -226,7 +218,8 @@
 		
 		
 		//更新修改后的个人密码
-		public function userupdate($username,$password){
+		public function userupdate($username,$password)
+		{
 			
 			$psd = $this->user()->hash_psd($password);
 		
@@ -234,18 +227,19 @@
 			
 			$data =['password'=>$psd];
 			
-			$this->user()->updates($this->table,$condition,$data); 
+			$this->user()->updates($condition,$data); 
 			
 			$this->success('用户'.$username.'编辑成功');
 											
 		}
 		
 		//查看用户名是否存在
-		public function namecheck($username){
+		public function namecheck($username)
+		{
 			
 			$condition =['username'=>$username];
 			
-			$user = $this->user()->counts($this->table,$condition);
+			$user = $this->user()->counts($condition);
 			
 			if($user>0){
 			
@@ -258,7 +252,8 @@
 		}
 		
 		//用户搜索
-		public function usersearch($limit,$page,$username){
+		public function usersearch($limit,$page,$username)
+		{
 	
 			//获取每页显示的条数
 		    $limits = $limit;
@@ -267,15 +262,19 @@
 			//计算出从那条开始查询
 		    $tol = $pages *	$limits;
 				   
-			$count = Db('admin')->where('username','like','%'.$username.'%')->count();   //统计总个数
+			$count = Db('user')->where('username','like','%'.$username.'%')->count();   //统计总个数
 			
 			$countpage = ceil($count /$limits);  //总页数
+	
+			$list =[
+				
+				'msg'=>'',
+					
+				'count'=>$count,//总条数
+					
+				'code'=>0,
 			
-			$list["msg"]='';
-			
-			$list['code']=0;
-			
-			$list['count']=$count;  //总条数
+			];
 
 			// 联合role表查询出当前user页数显示的数据
 			$data = $this->user()->likesearch($tol,$limit,$username);
@@ -287,7 +286,8 @@
 		}
 		
 		//更换用户头像
-		public function userimg(){
+		public function userimg()
+		{
 			
 			// 获取表单上传文件 例如上传了001.jpg
 			$file = request()->file('file');
@@ -316,7 +316,7 @@
 					
 					$condition =['username'=>$username];
 					
-					$this->user()->updates($this->table,$condition,$data); 
+					$this->user()->updates($condition,$data); 
 					
 					$this->success('头像更改成功');
 

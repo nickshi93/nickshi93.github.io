@@ -1,11 +1,15 @@
 <?php 
+	
 	namespace app\admin\controller;
 
 	use app\admin\model\Banner as BannerModel;
 	
-	use think\Db;
-	
 	Class Banner extends  Base{
+		
+		protected function banner()
+		{
+			return $banner =New BannerModel(); //实例化模型		
+		}
 		
 		public function index(){
 					
@@ -22,9 +26,7 @@
 			//计算出从那条开始查询
 		    $tol = $pages *	$limits;
 			
-			$banner = new BannerModel();
-			
-			$count =$banner->bannercount();   //统计总个数
+			$count =$this->banner()->bcount();   //统计总个数
 			
 			$countpage = ceil($count /$limits);  //总页数
 			
@@ -44,8 +46,6 @@
 		}
 		//更改轮播图类型
 		public function imgtype($id,$used){
-			
-			$banner =New BannerModel(); //实例化模型		
 				
 			$condition =['id'=>$id];
 				
@@ -53,7 +53,7 @@
 				
 			$data =['imgtype'=>$useds];
 								
-			$banner->updateb($condition,$data); 
+			$this->banner()->updates($condition,$data); 
 									
 			$this->Success('更改成功');
 						
@@ -61,27 +61,22 @@
 		//删除数据库中的轮播图数据
 		public function delbanner($id){
 
-			$banner =New BannerModel(); //实例化模型	
-
 			$condition =['id'=>$id];
 			
-			$banner->deletes($condition);
+			$this->banner()->del($condition);
 			
 			$this->Success('删除图片成功');
 			
 		}
 		
-		//更新轮播图排序
-		
+		//更新轮播图排序		
 		public function updatesort($id,$value,$field){
 				
 			$condition=['id'=>$id];
 			
 			$data=['sortid'=>$value];
-
-			$banner =New BannerModel(); //实例化模型						
-								
-			$banner->updateuser($condition); 	
+			
+			$this->banner()->updates($condition,$data); 	
 
 			$data ='编辑成功';
 			

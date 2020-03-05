@@ -2,21 +2,16 @@
 
 	namespace app\admin\controller;
 	
-	use app\admin\model\CategoryModel;
-	
-	use think\Controller;
-	
-	use think\Db;
-	
+	use app\admin\model\Category AS CategoryModel;
+
 	class Category extends Base{
-		
-		private $table='category';
-		
-		private  function category(){  
+	
+		private  function category()
+		{  
 			
-			$CategoryM =new CategoryModel();
+			$category =new CategoryModel();
 			
-			return $CategoryM;
+			return $category;
 			
 		}
 		
@@ -25,15 +20,17 @@
 		
 			$condition =['pid'=>0];
 			
-			$category = $this->category()->select($this->table,$condition);
+			$category = $this->category()->getAll($condition);
 			
 			$this->assign('category',$category);
 			
 			return $this->fetch('category/index');
 					
 		}
+		
 		//栏目信息
-		public function categoryinfo(){
+		public function categoryinfo()
+		{
 			
 			$list=[
 				
@@ -71,24 +68,26 @@
 		public function categorytree($condition)
 		{
 			
-			$cate = $this->category()->select($this->table,$condition);
+			$cate = $this->category()->getAll($condition);
 			
 			return $cate;
 			
 		}
 	
 		//删除栏目
-		public function delcategory($id){
+		public function delcategory($id)
+		{
 			
 			$condition =['id'=>$id];
 			
-			$this->category()->del($this->table,$condition);
+			$this->category()->del($condition);
 		
 			$this->Success($this->category()->msg(20010));
 
 		}
 		//新增栏目
-		public function addcategory($name,$id,$ishow,$sortid,$template){
+		public function addcategory($name,$id,$ishow,$sortid,$template)
+		{
 
 			$data =[
 				
@@ -104,20 +103,19 @@
 			
 			];
 			
-			$this->category()->insert($this->table,$data);
+			$this->category()->add($data);
 			
 			$this->Success($this->category()->msg(10010));
 				
 		}
 		
 		//编辑栏目
-		public function edits($id){
+		public function edits($id)
+		{
 			
 			$condition =['id'=>$id];
 	
-			$category = $this->category()->select($this->table,$condition);
-			
-			$this->assign('category',$category);
+			$category = $this->category()->getAll($condition);
 			
 			foreach($category as $a){
 				
@@ -127,16 +125,19 @@
 			
 			$condition =['id'=>$id];
 			
-			$tops =$this->category()->select($this->table,$condition);
+			$tops =$this->category()->selectc($condition);
 			
 			$this->assign('tops',$tops);
 			
+			$this->assign('category',$category);
+				
 			return $this->fetch();
 						
 		}
 		
 		//更新编辑栏目信息
-		public function updatecate($id,$pid,$name,$sortid,$ishow,$template){
+		public function updatecate($id,$pid,$name,$sortid,$ishow,$template)
+		{
 			
 			$data =[
 			
@@ -154,7 +155,7 @@
 			
 			$condition=['id'=>$id];
 			
-			$this->category()->updates($this->table,$condition,$data);
+			$this->category()->updates($condition,$data);
 			
 			$this->Success($this->category()->msg(30010));
 				

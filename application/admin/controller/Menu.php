@@ -6,7 +6,8 @@
 	
 	class Menu {
 				
-		public function index(){
+		public function index()
+		{
 			
 			return	$menu =[
 			
@@ -23,6 +24,7 @@
 							
 								[
 									'id'=>6,
+									'pid'=>1,
 									'name'=>'用户管理',
 									"icon"=>'&#xe770;',
 									'url'=>'user'
@@ -30,6 +32,7 @@
 								],
 								[
 									'id'=>7,
+									'pid'=>1,
 									'name'=>'会员管理',
 									"icon"=>'&#xe66f;',
 									'url'=>'member'
@@ -37,6 +40,7 @@
 								],
 								[
 									'id'=>8,
+									'pid'=>1,
 									'name'=>'用户日志',
 									"icon"=>'&#xe66e;',
 									'url'=>'userlog'
@@ -59,6 +63,7 @@
 						
 								[
 									'id'=>9,
+									'pid'=>2,
 									'name'=>'角色管理',
 									"icon"=>'&#xe613;',
 									'url'=>'roler'
@@ -118,6 +123,7 @@
 								
 								[
 									'id'=>13,
+									'pid'=>4,
 									'name'=>'栏目分类',
 									"icon"=>'&#xe647;',
 									'url'=>'category'
@@ -139,6 +145,7 @@
 						
 								[
 									'id'=>14,
+									'pid'=>5,
 									'name'=>'轮播管理',
 									"icon"=>'&#xe634;',
 									'url'=>'banner'
@@ -146,6 +153,7 @@
 								],	
 								[
 									'id'=>15,
+									'pid'=>5,
 									'name'=>'阿里大鱼短信',
 									"icon"=>'&#xe63b;',
 									'url'=>'dysms'
@@ -167,6 +175,7 @@
 						
 								[
 									'id'=>17,
+									'pid'=>16,
 									'name'=>'文章管理',
 									"icon"=>'&#xe634;',
 									'url'=>'article'
@@ -174,6 +183,7 @@
 								],
 								[
 									'id'=>18,
+									'pid'=>16,
 									'name'=>'新增文章',
 									"icon"=>'&#xe634;',
 									'url'=>'addarticle'

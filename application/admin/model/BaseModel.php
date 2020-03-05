@@ -45,38 +45,6 @@
 			
 		}
 		
-	
-		//根据条件统计数据
-		public function counts($table,$condition){
-			
-			$result = Db($table)->where($condition)->count();
-			
-			return $result;
-		}
-		
-		
-		//更新数据
-		public function updates($table,$condition,$data){
-			
-			Db($table)->where($condition)->update($data);
-			
-		}
-		
-		//删除数据
-		public function del($table,$condition){
-			
-			Db($table)->where($condition)->delete();
-			
-			return true;
-		}
-		
-		//根据条件查询数据
-		public function select($table,$condition){
-
-			$result = Db($table)->where($condition)->select();
-			
-			return $result;
-		}
 		
 		//根据条件查询数据
 		public function find($table,$condition){
@@ -86,14 +54,7 @@
 			return $result;
 		}
 		
-		
-		//表格插入数据
-		public function insert($table,$data){
-			
-			Db($table)->insert($data);
-
-		}
-		
+	
 		//加密
 		public function hash_psd($psd){
 			

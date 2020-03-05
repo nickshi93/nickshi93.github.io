@@ -2,17 +2,23 @@
 
 	namespace app\admin\controller;
 	
-	use think\Controller;
+	use app\admin\model\Home as HomeModel;
 	
 	class Home extends Base{
 		
-		public function index(){			
+		protected function Home()
+		{
 			
-			$com = new Common();
+			return $home = new HomeModel();
 			
-			$member = $com ->totaltable('member'); 
+		}
+		
+		public function index()
+		{			
+	
+			$member = $this->home()->countable('member'); 
 			
-			$article = $com ->totaltable('article'); 
+			$article =$this->home()->countable('article'); 
 			
 			$this->assign('member',$member);
 			

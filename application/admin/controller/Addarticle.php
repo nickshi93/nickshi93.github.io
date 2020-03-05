@@ -1,13 +1,18 @@
 <?php 
+	
 	namespace app\admin\controller;
 	
-	use think\Controller;
-	
-	use think\Db;
+	use app\admin\model\Article as ArticleModel;
 	
 	use think\Cookie;
 	
 	class Addarticle extends Base{
+		
+		public function article()
+		{
+			
+			return $article =new ArticleModel();
+		}
 		
 		public function index(){
 			
@@ -75,9 +80,16 @@
 		//文章根据pid的值查询栏目
 		public function artree($pid,$params){
 			
-			$cate =Db::table('tp_category')->where($pid,$params)->where('url','news')->select();
+			$condition =[ 
+				
+				$pid=>$params,
+				
+				'url'=>'news',
 			
-			return $cate;
+			];
+			
+			return $this->article()->articlecate($condition);
+			
 		}
 		
 		//封面图片上传到后台
@@ -148,7 +160,7 @@
 				'descript'=>$descript
 			];
 			
-			$res =Db('article')->insert($data);
+			$res =$this->article()->add($data);
 			
 			Cookie::delete('img');
 			

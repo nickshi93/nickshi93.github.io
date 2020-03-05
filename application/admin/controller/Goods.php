@@ -2,8 +2,6 @@
 
 	namespace app\admin\controller;
 
-	use think\Controller;
-	
 	use think\db;
 	
 	use think\view;

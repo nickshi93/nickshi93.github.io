@@ -2,17 +2,23 @@
 	
 	namespace app\admin\controller;
 	
-	use think\Controller;
-	
-	use think\Db;
+	use app\admin\model\Dysms as DysmsModel;
 	
 	class Dysms extends Base{
-		
-		private $table ='dysms';
-
-		public function index(){
+	
+		public function dysms()
+		{
+			$dysms =new DysmsModel();
 			
-			$dysms =Db($this->table)->select();
+			return $dysms;
+			
+		}
+		
+		public function index()
+		{
+			$condition=[];
+			
+			$dysms =$this->dysms()->getAll($condition);
 			
 			$this->assign('dysms',$dysms);
 			
@@ -36,7 +42,7 @@
 			
 			$condition =['id'=>1];
 				
-			Db($this->table)->where($condition)->update($data);
+			$this->dysms()->updates($condition,$data);
 			
 			return $this->success('更新成功');
 			

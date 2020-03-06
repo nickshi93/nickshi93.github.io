@@ -1,15 +1,15 @@
 <?php
 	
 	namespace app\admin\model;
-	
-	use think\Db;
-	
+
 	class Login extends BaseModel{
+		
+		protected $table='tp_user';
 		
 		public function updates($condition,$data)
 		{
 			
-			Db('user')->where($condition)->update($data);
+			$this->where($condition)->update($data);
 				
 		}
 		

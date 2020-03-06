@@ -4,8 +4,6 @@
 	
 	use app\admin\model\User as UserModel;
 
-	use think\Db;
-	
 	class User extends Base{
 			
 		private $table='user';	
@@ -15,7 +13,7 @@
 		private function user()
 		{
 			
-			$user =New UserModel(); //实例化模型
+			$user = New UserModel; //实例化模型
 			
 			return $user;
 			
@@ -31,7 +29,7 @@
 			$users = $this->user()->page(); //获取用户数据
 		
 			$pages = $users->render();//用户数据分页
-			
+
 			$role = $this->user()->role();
 			
 			$token =$this->request->token('_token_');//生成令牌
@@ -56,7 +54,7 @@
 		    $tol = $pages *	$limits;
 			
 			$condition=[];
-				   
+
 			$count =$this->user()->counts($condition);   //统计总个数
 			
 			$countpage = ceil($count /$limits);  //总页数
@@ -66,7 +64,7 @@
 			$list['code']=0;
 			
 			$list['count']=$count;  //总条数
-
+			
 			// 联合role表查询出当前user页数显示的数据
 			$data = $this->user()->userlist($tol,$limit);
 			
@@ -94,18 +92,18 @@
 			$this->Success('删除用户成功');
 
 		}
-		
+			
 		//新增用户
-		public function adduser($username,$password,$re_pwd,$used,$role)
+		public function adduser($user)
 		{
 			
-			$this->namecheck($username);
+			$this->namecheck($user['username']);
 				
-			$password =$this->user()->hash_psd($password);
+			$password =$this->user()->hash_psd($user['password']);
 
-			$this->user()->adduser($username,$password,$used,$role);
+			$this->user()->adduser($user,$password);
 				
-			return $this->success('新增'.$username.'用户成功');
+			return $this->success('新增'.$user['username'].'用户成功');
 				
 		}
 		
@@ -137,7 +135,7 @@
 								
 			$this->user()->updates($condition,$data); 
 									
-			$this->Success('更改状态成功');
+			$this->Success('更改成功');
 
 		}
 		
@@ -262,7 +260,7 @@
 			//计算出从那条开始查询
 		    $tol = $pages *	$limits;
 				   
-			$count = Db('user')->where('username','like','%'.$username.'%')->count();   //统计总个数
+			$count = $this->user()->searchcount($username);   //统计总个数
 			
 			$countpage = ceil($count /$limits);  //总页数
 	
@@ -295,32 +293,32 @@
 			// 移动到框架应用根目录/public/userimage/ 目录下
 			$info = $file->move(ROOT_PATH . 'public' . DS . 'userimage');
 				
-				if($info){	
-					// 成功上传后 获取上传信息
-					// 输出 jpg
-					$img= $info->getExtension();
+			if($info){	
+				// 成功上传后 获取上传信息
+				// 输出 jpg
+				$img= $info->getExtension();
 				   
-					// 输出 20160820/42a79759f284b767dfcb2a0197904287.jpg
-					$address = $info->getSaveName();	
+				// 输出 20160820/42a79759f284b767dfcb2a0197904287.jpg
+				$address = $info->getSaveName();	
 								
-					// 输出 42a79759f284b767dfcb2a0197904287.jpg
-					$imgname = $info->getFilename(); 
+				// 输出 42a79759f284b767dfcb2a0197904287.jpg
+				$imgname = $info->getFilename(); 
 					
-					$data =[
+				$data =[
 						
-						'img'=>'/userimage/'.$address,
+					'img'=>'/userimage/'.$address,
 					
-					];
+				];
 					
-					$username = $this->admin(); //用户名
+				$username = $this->admin(); //用户名
 					
-					$condition =['username'=>$username];
+				$condition =['username'=>$username];
 					
-					$this->user()->updates($condition,$data); 
+				$this->user()->updates($condition,$data); 
 					
-					$this->success('头像更改成功');
+				$this->success('头像更改成功');
 
-				}
+			}
 		}
 		
 		

@@ -2,8 +2,6 @@
 	
 	namespace app\admin\model;
 	
-	use think\Db;
-
 	class User extends BaseModel{
 
 		public function  page()
@@ -13,15 +11,23 @@
 			
 		}
 		
+		
+		public function userole()
+		{
+		
+			return $this->hasOne('Role','id','role')->bind('name');// bind绑定属性到父模型   hasOne('关联模型名','外键名','主键名',['模型别名定义'],'join类型');
+			
+		}
+		
 		//后台新增用户
-		public function adduser($username,$password,$used,$role)
+		public function adduser($user,$password)
 		{
 			
 			$time = date('Y-m-d H:i:s',time());
 			
 			$data =[
 				
-				'username'=>$username,
+				'username'=>$user['username'],
 				
 				'password'=>$password,
 				
@@ -29,9 +35,9 @@
 				
 				'login_time'=>'',
 				
-				'used' =>$used,
+				'used' =>$user['used'],
 				
-				'role'=>$role,
+				'role'=>$user['role'],
 				
 				'img'=>'/userimage/20191206/d9f567c2c05ba41b29074d266f5990dd.jpg'
 	
@@ -43,35 +49,26 @@
 		//用户列表
 		public function userlist($tol,$limit)
 		{
+			
+			return User::with('userole')->limit($tol,$limit)->order('id desc')->select();
 
-			$result =$this->alias('a')->join('tp_role c','a.role=c.id')
-					->field('a.id,a.username,a.login_time,a.resign_time,a.used,a.role,c.name')
-					->limit($tol,$limit)
-					->order('id desc')
-					->select(); 	
-			
-			return $result;	
-			
 		}
 		
 		//模糊用户list
 		public function likesearch($tol,$limit,$username)
 		{
 			
-			$result =$this->alias('a')->join('tp_role c','a.role=c.id')
-					->field('a.id,a.username,a.login_time,a.resign_time,a.used,a.role,c.name')
-					->where('username','like','%'.$username.'%')
+			return 	User::with('userole')->where('username','like','%'.$username.'%')
 					->limit($tol,$limit)
 					->order('id desc')
 					->select(); 	
-			
-			return $result;	
+
 		}
-		
+		//Model查询角色LIST
 		public function role()
 		{
 			
-			return Db('role')->field('id,name')->select();
+			return Role::select();
 			
 		}
 		
@@ -103,12 +100,10 @@
 			
 		}
 		
-		
-		//用户模糊搜索总数
-		public function likeserachtol(){
+		public function searchcount($username)
+		{
 			
-			
-			
+			return $this->where('username','like','%'.$username.'%')->count();   
 		}
 		
 		

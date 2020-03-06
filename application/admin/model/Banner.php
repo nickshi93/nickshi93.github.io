@@ -2,8 +2,6 @@
 
 	namespace app\admin\model;
 	
-	use think\Db;
-	
 	class Banner extends BaseModel
 	{
 		

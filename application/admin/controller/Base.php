@@ -6,11 +6,15 @@
 
 	use think\Cookie;
 	
+	use think\facade\Request;
+	
 	use think\Db;
 	
 	class Base extends Controller{
 		
 		protected $controller;
+		
+		protected $ajax;
 		
 		protected $allowAction=[  //允许未登录可进入的页面路径
 
@@ -27,6 +31,8 @@
 			$this->admin();
 			
 			$this->userole();
+			
+			$this->action();
 		
 		}
 		
@@ -94,6 +100,13 @@
 			
 			
 			
+		}
+		
+		
+		public function action()
+		{
+			
+			$ajax = $this->request->isAjax();
 		}
 		
 		protected function admin(){

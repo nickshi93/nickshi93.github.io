@@ -70,24 +70,29 @@
 		//查询用户列表权限
 		public function userole(){
 			
-			$name = cookie::get('name'); //用户名
-			
-			$userole = Db('user')->where('username',$name)->field('role')->select();
+			if(Cookie::has('name'))
+			{
+				$name = cookie::get('name'); //用户名
+				
+				$userole = Db('user')->where('username',$name)->field('role')->select();
 
-			foreach ($userole as $role){
+				foreach ($userole as $role){
+					
+					$a =$role['role'];
+				}
 				
-				$a =$role['role'];
+				$result = Db('role')->where('id',$a)->field('authority')->select();
+				
+				foreach($result as $roles){
+					
+					$b = $roles['authority'];
+					
+				}
+				
+				return $role = $b;
 			}
 			
-			$result = Db::table('tp_role')->where('id',$a)->field('authority')->select();
 			
-			foreach($result as $roles){
-				
-				$b = $roles['authority'];
-				
-			}
-			
-			return $role = $b;
 			
 		}
 		

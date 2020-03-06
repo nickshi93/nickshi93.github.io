@@ -37,7 +37,7 @@
 			$list['count']=$count;  //总条数
 
 			// 查询出当前页数显示的数据
-			$data = $banner->select($tol,$limit);
+			$data = $this->banner()->select($tol,$limit);
 	
 			$list['data']= $data;
 			

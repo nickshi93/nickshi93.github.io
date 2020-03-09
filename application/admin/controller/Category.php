@@ -125,7 +125,7 @@
 			
 			$condition =['id'=>$id];
 			
-			$tops =$this->category()->selectc($condition);
+			$tops =$this->category()->getAll($condition);
 			
 			$this->assign('tops',$tops);
 			

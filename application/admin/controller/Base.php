@@ -2,13 +2,13 @@
 
 	namespace app\admin\controller;
 	
+	use app\admin\model\BaseModel;
+	
 	use think\Controller;
 
 	use think\Cookie;
 	
 	use think\facade\Request;
-	
-	use think\Db;
 	
 	class Base extends Controller{
 		
@@ -39,7 +39,7 @@
 		//检查是否登录
 		protected function checklogin(){
 			
-			$name = Cookie::get('name');
+			$name = $this->admin();
 			
 			if(in_array($this->actionUrl(),$this->allowAction)){
 				
@@ -59,11 +59,17 @@
 			
 			$menus= $menu ->index();
 			
-			$name =cookie::get('name'); //用户名
+			$name =$this->admin(); //用户名
 				
 			$this->assign('name',$name);
 			
-			$user =Db('user')->where('username',$name)->find();
+			$base =NEW BaseModel();
+			
+			$table ='user';
+			
+			$condition =['username'=>$name];
+			
+			$user =$base->find($table,$condition);
 			
 			$img =$user['img'];
 			
@@ -78,16 +84,30 @@
 			
 			if(Cookie::has('name'))
 			{
-				$name = cookie::get('name'); //用户名
+				$name = $this->admin(); //用户名
 				
-				$userole = Db('user')->where('username',$name)->field('role')->select();
+				$base =NEW BaseModel();
+
+				$table ='user';
+				
+				$condition =['username'=>$name];
+				
+				$field='role';
+				
+				$userole = $base->selectb($table,$condition,$field);
 
 				foreach ($userole as $role){
 					
-					$a =$role['role'];
+					$id =$role['role'];
 				}
 				
-				$result = Db('role')->where('id',$a)->field('authority')->select();
+				$table ='role';
+				
+				$condition =['id'=>$id];
+				
+				$field='authority';
+				
+				$result = $base->selectb($table,$condition,$field);
 				
 				foreach($result as $roles){
 					
@@ -109,6 +129,7 @@
 			$ajax = $this->request->isAjax();
 		}
 		
+		//登录名
 		protected function admin(){
 			
 			$name = Cookie::get('name');

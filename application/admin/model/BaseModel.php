@@ -47,7 +47,8 @@
 		
 		
 		//根据条件查询数据
-		public function find($table,$condition){
+		public function find($table,$condition)
+		{
 
 			$result = Db($table)->where($condition)->find();
 			
@@ -56,10 +57,20 @@
 		
 	
 		//加密
-		public function hash_psd($psd){
+		public function hash_psd($psd)
+		{
 			
 			$password = md5(md5($psd));
 			
 			return $password;
 		}
+		
+		public function selectb($table,$condition,$field)
+		{
+			
+			$result =Db($table)->where($condition)->field($field)->select();
+			
+			return $result;
+		}
+		
 	}

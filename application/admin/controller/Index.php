@@ -142,5 +142,12 @@
 			return $art ->index();			
 						
 		}
-		
+		//清除缓存
+		public function cache()
+		{
+			$cache = new Caches();
+			
+			return $cache ->clear_temp_ahce();	
+			
+		}
 	}
